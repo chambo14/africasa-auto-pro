@@ -1,4 +1,4 @@
-package com.example.africasa_mecano
+package com.africasa.app
 
 import io.flutter.embedding.android.FlutterActivity
 
