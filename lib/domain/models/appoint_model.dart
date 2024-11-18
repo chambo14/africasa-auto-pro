@@ -47,11 +47,11 @@ class Datum {
   final DateTime dateRdv;
   final String hourStartRdv;
   final String hourEndRdv;
-  final dynamic status;
-  final dynamic isActive;
+  final String status;
+  final String isActive;
   final dynamic deletedAt;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final Client client;
 
   Datum({
@@ -76,11 +76,11 @@ class Datum {
     DateTime? dateRdv,
     String? hourStartRdv,
     String? hourEndRdv,
-    dynamic status,
-    dynamic isActive,
+    String? status,
+    String? isActive,
     dynamic deletedAt,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     Client? client,
   }) =>
       Datum(
@@ -112,8 +112,8 @@ class Datum {
     status: json["status"],
     isActive: json["is_active"],
     deletedAt: json["deleted_at"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
     client: Client.fromJson(json["client"]),
   );
 
@@ -127,8 +127,8 @@ class Datum {
     "status": status,
     "is_active": isActive,
     "deleted_at": deletedAt,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
     "client": client.toJson(),
   };
 }
@@ -146,8 +146,8 @@ class Client {
   final dynamic numCni;
   final dynamic numPermis;
   final dynamic photo;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final dynamic deletedAt;
 
   Client({
@@ -181,8 +181,8 @@ class Client {
     dynamic numCni,
     dynamic numPermis,
     dynamic photo,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     dynamic deletedAt,
   }) =>
       Client(
@@ -220,8 +220,8 @@ class Client {
     numCni: json["num_cni"],
     numPermis: json["num_permis"],
     photo: json["photo"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
     deletedAt: json["deleted_at"],
   );
 
@@ -238,8 +238,8 @@ class Client {
     "num_cni": numCni,
     "num_permis": numPermis,
     "photo": photo,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
     "deleted_at": deletedAt,
   };
 }
