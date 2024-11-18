@@ -35,7 +35,7 @@ class ListOperationModel {
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data!.toJson(),
+    "data": data?.toJson(),
     "message": message,
   };
 }
@@ -86,10 +86,10 @@ class AllOperation {
   final String libelle;
   final String motif;
   final int amount;
-  final String typeOperation;
+  final TypeOperation typeOperation;
   final dynamic fichier;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final int userId;
 
   AllOperation({
@@ -113,10 +113,10 @@ class AllOperation {
     String? libelle,
     String? motif,
     int? amount,
-    String? typeOperation,
+    TypeOperation? typeOperation,
     dynamic fichier,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     int? userId,
   }) =>
       AllOperation(
@@ -144,10 +144,10 @@ class AllOperation {
     libelle: json["libelle"],
     motif: json["motif"],
     amount: json["amount"],
-    typeOperation: json["type_operation"],
+    typeOperation: typeOperationValues.map[json["type_operation"]]!,
     fichier: json["fichier"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
     userId: json["user_id"],
   );
 
@@ -158,10 +158,32 @@ class AllOperation {
     "libelle": libelle,
     "motif": motif,
     "amount": amount,
-    "type_operation": typeOperation,
+    "type_operation": typeOperationValues.reverse[typeOperation],
     "fichier": fichier,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
     "user_id": userId,
   };
+}
+
+enum TypeOperation {
+  ENTREE,
+  SORTIE
+}
+
+final typeOperationValues = EnumValues({
+  "ENTREE": TypeOperation.ENTREE,
+  "SORTIE": TypeOperation.SORTIE
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
