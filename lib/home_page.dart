@@ -481,7 +481,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: gainController,
-                  keyboardType: TextInputType.visiblePassword,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Svp entrez votre gain';
@@ -582,7 +582,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: motifRetraitController,
-                  keyboardType: TextInputType.visiblePassword,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Svp entrez votre motif';
