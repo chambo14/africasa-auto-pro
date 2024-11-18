@@ -31,6 +31,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   late LoginPhoneController _loginPhoneController = LoginPhoneController();
   String initialCountry = 'CI';
   FocusNode focusNode = FocusNode();
+  bool _isObscured = true;
 
   @override
   void initState() {
@@ -92,6 +93,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return TextFormField(
       controller: passwordController,
       keyboardType: TextInputType.visiblePassword,
+      obscureText: _isObscured,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Svp entrez votre mot de passe';
@@ -103,7 +105,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         fillColor: Colors.white,
         filled: true,
         hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
-        suffixIcon: Icon(Icons.remove_red_eye_outlined,color: Colors.grey.shade200,),
+        suffixIcon: IconButton(onPressed: (){
+          setState(() {
+            _isObscured = !_isObscured; // Alterner la visibilité
+          });
+        },icon:Icon( _isObscured ? Icons.visibility_off : Icons.visibility,)),
         prefixIcon: Icon(Icons.lock,color: Colors.grey.shade200,),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
