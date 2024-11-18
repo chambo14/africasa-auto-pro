@@ -23,6 +23,8 @@ class ListOperationProvider extends ChangeNotifier {
     }
 
     _listOperationModel = response;
+
+    return _listOperationModel;
   }
 
   ListOperationModel? get listOperationModel => _listOperationModel;

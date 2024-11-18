@@ -48,9 +48,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
              Image.asset("assets/logo.png"),
-              Text("Connecte-toi avec ton numero de telephone", style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),),
+              Text("Connecte-toi avec ton numero de telephone", style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 70,),
               contactField(),
               const SizedBox(height: 20,),

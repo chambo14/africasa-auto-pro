@@ -81,12 +81,12 @@ class Data {
 
 class AllOperation {
   final int id;
-  final String reference;
+  final String? reference;
   final DateTime dateOperation;
-  final String libelle;
-  final String motif;
+  final String? libelle;
+  final String? motif;
   final int amount;
-  final TypeOperation typeOperation;
+  final String? typeOperation;
   final dynamic fichier;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -126,7 +126,7 @@ class AllOperation {
         libelle: libelle ?? this.libelle,
         motif: motif ?? this.motif,
         amount: amount ?? this.amount,
-        typeOperation: typeOperation ?? this.typeOperation,
+        typeOperation: this.typeOperation,
         fichier: fichier ?? this.fichier,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -144,7 +144,7 @@ class AllOperation {
     libelle: json["libelle"],
     motif: json["motif"],
     amount: json["amount"],
-    typeOperation: typeOperationValues.map[json["type_operation"]]!,
+    typeOperation: json["type_operation"],
     fichier: json["fichier"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
@@ -158,7 +158,7 @@ class AllOperation {
     "libelle": libelle,
     "motif": motif,
     "amount": amount,
-    "type_operation": typeOperationValues.reverse[typeOperation],
+    "type_operation": typeOperation,
     "fichier": fichier,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),

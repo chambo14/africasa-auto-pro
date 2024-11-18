@@ -33,11 +33,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.white,
-              child:  Image.asset("assets/logo.png"),
-            ),
+            Image.asset("assets/logo_complet.jpeg", width: 260,)
 
 
           ],

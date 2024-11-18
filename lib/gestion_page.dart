@@ -70,7 +70,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
 
       var data = _listOperationProvider.listOperationModel?.data;
       //print('la valeur de ce $data');
-      if (_listOperationProvider.isLoading) {
+      if (_listOperationProvider.isLoading || data == null) {
         return Padding(
           padding: const EdgeInsets.all(170.0),
           child: NutsActivityIndicator(
@@ -83,7 +83,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
           ),
         );
       }
-      if (data!.allOperations.isEmpty) {
+      if (data.allOperations.isEmpty) {
         return Padding(
           padding: const EdgeInsets.only(top:250.0),
           child: Center(

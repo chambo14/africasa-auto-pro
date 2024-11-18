@@ -47,8 +47,8 @@ class Datum {
   final DateTime dateRdv;
   final String hourStartRdv;
   final String hourEndRdv;
-  final String status;
-  final String isActive;
+  final String? status;
+  final String? isActive;
   final dynamic deletedAt;
   final DateTime createdAt;
   final DateTime updatedAt;

@@ -78,7 +78,7 @@ class _BookingPageState extends ConsumerState<BookingPage> {
          ),
        );
      }
-     if (data!.isEmpty || data == null) {
+     if (data == null || data.isEmpty) {
        return Padding(
          padding: const EdgeInsets.only(top:250.0),
          child: Center(
@@ -126,7 +126,9 @@ class _BookingPageState extends ConsumerState<BookingPage> {
                        padding: const EdgeInsets.all(2),
                        decoration: BoxDecoration(
                          borderRadius: BorderRadius.circular(10),
-                         color: Colors.blue.shade500,
+                         color: item.status.toString() == "ACCEPTED" 
+                         ? Colors.green.shade500
+                         : Colors.blue.shade500,
                        ),
                        child: Center(
                          child: Text(

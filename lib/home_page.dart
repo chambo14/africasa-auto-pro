@@ -317,7 +317,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ,  // Affiche avec deux décimales
                             style: GoogleFonts.poppins(
                               color: Colors.grey.shade500,
-                              fontSize: 25,
+                              fontSize: 20,
                             ),
                           ),
                         ],
@@ -346,7 +346,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                           Text(totalPrixSortie.toStringAsFixed(0),
                               style: GoogleFonts.poppins(
-                                  color: Colors.grey.shade500, fontSize: 25))
+                                  color: Colors.grey.shade500, fontSize: 20))
                         ],
                       ),
                     ],
@@ -671,7 +671,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  void operationSubmit( String date_operation, libelle, motif,amount, type_operation) async {
+  Future<void> operationSubmit( String date_operation, libelle, motif,amount, type_operation) async {
     var checkInternet = checkNetwork();
 
     if (await checkInternet) {
@@ -718,7 +718,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (sortieController.text.isNotEmpty || motifRetraitController.text.isNotEmpty||libelleRetraitController.text.isNotEmpty ) {
 
 
-      operationSubmit(formattedDate,libelleRetraitController.text, motifRetraitController.text, sortieController.text, operation_type);
+      operationSubmit(formattedDate,libelleRetraitController.text, motifRetraitController.text, sortieController.text, operation_type).then((value) {
+        
+      });
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -738,7 +740,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (gainController.text.isNotEmpty || motifController.text.isNotEmpty||libelleController.text.isNotEmpty ) {
 
 
-      operationSubmit(formattedDate,libelleController.text, motifController.text, gainController.text, operation_entree);
+      operationSubmit(formattedDate,libelleController.text, motifController.text, gainController.text, operation_entree).whenComplete(() {
+       _listOperationProvider.getListOperation(); 
+      });
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
