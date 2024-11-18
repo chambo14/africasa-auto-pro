@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'core/components/dialog_alert.dart';
 import 'core/utils/check_network.dart';
@@ -39,27 +40,50 @@ class _ClientPageState extends ConsumerState<ClientPage> {
     });
     super.initState();
   }
+  _launchPhoneApp(Uri uri) async {
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      debugPrint('###### Could not launch ');
+      throw 'Impossible de lancer l\'appel';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(
-        leading: IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const  BookingPage()));}, icon: Icon(Icons.arrow_back_ios, color: Colors.blue.shade500,),),
-        title: Text('Voir le client', style: GoogleFonts.poppins(fontSize: 18, color: Colors.blue.shade500),),
-       centerTitle: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
-          child: Consumer(
-            builder: (context, ref, child) {
-              _detailAppointmentProvider =
-                  ref.watch(detailAppointmentProvider);
-              var info = _detailAppointmentProvider.detailAppointment;
+    return  Consumer(
+      builder: (context, ref, child) {
+        _detailAppointmentProvider =
+            ref.watch(detailAppointmentProvider);
+        var info = _detailAppointmentProvider.detailAppointment;
 
-              if (info == null || info.data == null|| info.data!.appointment == null ) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Column(
+        if (info == null || info.data == null|| info.data!.appointment == null ) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const  BookingPage()));}, icon: Icon(Icons.arrow_back_ios, color: Colors.blue.shade500,),),
+            title: Text('Voir le client', style: GoogleFonts.poppins(fontSize: 18, color: Colors.blue.shade500),),
+           centerTitle: true,
+            actions: [
+              InkWell(
+                onTap: (){
+                  checkRef();
+                },
+                child: IconButton(
+                  onPressed: (){
+                    _launchPhoneApp(Uri(scheme: 'tel', path: '+225${info.data!.appointment.client.contact}'));
+                  },
+                  icon: Icon(Icons.phone, color: Colors.blue.shade400,),
+                ),
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+              child: Column(
                 children: [
                   Row(
                     children: [
@@ -106,6 +130,7 @@ class _ClientPageState extends ConsumerState<ClientPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+
                       InkWell(
                         onTap: (){
                           checkRef();
@@ -114,8 +139,8 @@ class _ClientPageState extends ConsumerState<ClientPage> {
                           height: 50,
                           width: 150,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.red.shade300
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.red.shade300
                           ),
                           child:  Center(child: Text("Annuler",  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white))),
                         ),
@@ -125,14 +150,14 @@ class _ClientPageState extends ConsumerState<ClientPage> {
                           checkApprove();
                         },
                         child: Container(
-                          height: 50,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue.shade300
-                          ),
-                          child:  Center(child: Text("Valider",  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white)),
-                        )),
+                            height: 50,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.blue.shade300
+                            ),
+                            child:  Center(child: Text("Valider",  style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white)),
+                            )),
                       ),
 
                     ],
@@ -140,11 +165,12 @@ class _ClientPageState extends ConsumerState<ClientPage> {
 
 
                 ],
-              );
-            }
+              )
+              ,
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
   void approveSubmit( int id) async {

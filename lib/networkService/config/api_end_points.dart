@@ -16,6 +16,7 @@ class ApiEndPoints {
   static const userInfo = "/api/user";
   static const modifiedPassword = "/api/forgot-password";
   static const reset = "/api/reset-password";
+  static const updateProfil = "/api/user/update";
 
 
 

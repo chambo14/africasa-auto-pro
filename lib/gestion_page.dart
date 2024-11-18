@@ -28,6 +28,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -139,7 +140,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
                         Row(
                           children: [
                             Text('Reference: ', style: GoogleFonts.poppins(fontSize: 15,color: Colors.blue.shade700),),
-                            Text(item.reference.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
+                            Text(item.motif.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
                           ],
                         ),
                         Row(

@@ -1,3 +1,4 @@
+import 'package:africasa_mecano/Update_profile_page.dart';
 import 'package:africasa_mecano/home_page.dart';
 import 'package:africasa_mecano/provider/info_user_provider.dart';
 import 'package:flutter/material.dart';
@@ -93,11 +94,31 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
                       Text(infoClient.mecanicien!.speciality.toString(),  style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
                     ],
                   ),
+                  const SizedBox(height: 20,),
+
                 ],
               );
             }
           ),
         ),
+      ),
+    );
+  }
+
+  Widget button(){
+    return InkWell(
+      onTap: (){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const UpdateProfilePage()));
+       // checkInfoLogin();
+      },
+      child: Container(
+        height: 50,
+        width: 320,
+        decoration: BoxDecoration(
+            color: Colors.blue.shade500,
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Center(child: Text("Se connecter", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
       ),
     );
   }

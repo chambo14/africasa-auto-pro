@@ -20,6 +20,7 @@ import '../../domain/models/logout_model.dart';
 import '../../domain/models/mecano_model.dart';
 import '../../domain/models/rendez_vous_model.dart';
 import '../../domain/models/response_model.dart';
+import '../../domain/models/update_profile_model.dart';
 import '../../domain/models/user_info_model.dart';
 import '../../domain/models/user_model.dart';
 import '../config/api.dart';
@@ -163,6 +164,54 @@ class ApiRepository {
       }
     } catch (e) {
       return ResponseModel(message: ErrorResponse.checkMessage(e));
+    }
+  }
+
+  Future<UpdateProfilModel?> UpdateProfil(String name, String lastname, String ville, String adresse, String num_cni) async {
+    String url = Api.baseUrl + ApiEndPoints.updateProfil;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.post(
+        url: url,
+        data: {
+          "name": name,
+          "lastname": lastname,
+          "ville": ville,
+          "adresse": adresse,
+          "num_cni": num_cni
+        },
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $tokens",
+            'content-type': 'application/json',
+            'accept':'application/json'
+          },
+          followRedirects: false, // Désactiver la redirection automatique
+          validateStatus: (status) {
+            return status! < 500; // Accepter toutes les réponses inférieures à 500
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 400) {
+        if (kDebugMode) {
+          print(ResponseModel.fromJson(response.data));
+        }
+        UpdateProfilModel profil = UpdateProfilModel.fromJson(response.data);
+        return profil;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return UpdateProfilModel();
+      }
+    } catch (e) {
+      return UpdateProfilModel(message: ErrorResponse.checkMessage(e));
     }
   }
   Future<PasswordModel?> passwordForgot(String contact,) async {

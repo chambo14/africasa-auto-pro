@@ -162,8 +162,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       },
     );
   }
-
-
   Future<String> loadFromJson() async {
     return await rootBundle.loadString('assets/countries/country_list_en.json');
   }

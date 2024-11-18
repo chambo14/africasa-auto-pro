@@ -4,6 +4,7 @@ import 'package:africasa_mecano/provider/detail_operation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailOperationPage extends ConsumerStatefulWidget {
   const DetailOperationPage({super.key, required this.response});
@@ -24,6 +25,8 @@ class _DetailOperationPageState extends ConsumerState<DetailOperationPage> {
     });
     super.initState();
   }
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
