@@ -4,6 +4,7 @@ import 'package:africasa_mecano/provider/detail_operation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailOperationPage extends ConsumerStatefulWidget {
@@ -47,6 +48,8 @@ class _DetailOperationPageState extends ConsumerState<DetailOperationPage> {
              if (info == null || info.data == null || info.data!.operation == null) {
                return const Center(child: CircularProgressIndicator());
              }
+             //String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(info.data!.operation.dateOperation as String));
+
              return Column(
                children: [
                  Container(
@@ -56,43 +59,40 @@ class _DetailOperationPageState extends ConsumerState<DetailOperationPage> {
                          children: [
                            Text("Type de transaction", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
                            const SizedBox(width: 10,),
-                           Text(info.data!.operation.typeOperation.toString(), style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
+                           Text(info.data!.operation.typeOperation.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
                          ],
                        ),
+                       const SizedBox(height: 10,),
                        Row(
                          children: [
                            Text("Reference:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
                            const SizedBox(width: 10,),
-                           Text(info.data!.operation.reference.toString(), style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
+                           Text(info.data!.operation.reference.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
                          ],
                        ),
+                       const SizedBox(height: 10,),
                        Row(
                          children: [
                            Text("Date de transaction:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
                            const SizedBox(width: 10,),
-                           Text(info.data!.operation.dateOperation.toString(), style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
+                           Text(DateFormat('yyyy-mm-dd').format(info.data!.operation.dateOperation), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
                          ],
                        ),
-                       Row(
-                         children: [
-                           Text("Transaction:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
-                           const SizedBox(width: 10,),
-                           Text(info.data!.operation.libelle.toString(), style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
-                         ],
-                       ),
+                       const SizedBox(height: 10,),
                        Row(
                          children: [
                            Text("Motif:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
                            const SizedBox(width: 10,),
-                           Text(info.data!.operation.motif.toString(), style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
+                           Text(info.data!.operation.motif.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700))
                          ],
                        ),
+                       const SizedBox(height: 10,),
                        Row(
                          children: [
                            Text("Montant:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
                            const SizedBox(width: 10,),
-                           Text(info.data!.operation.amount.toString(), style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
-                           Text("FCFA:", style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
+                           Text(info.data!.operation.amount.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
+                           Text("FCFA:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
                          ],
                        ),
                      ],

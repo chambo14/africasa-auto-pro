@@ -29,7 +29,7 @@ class UpdateProfilModel {
 
   factory UpdateProfilModel.fromJson(Map<String, dynamic> json) => UpdateProfilModel(
     success: json["success"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] != null ? Data.fromJson(json["data"]) : null,
     message: json["message"],
   );
 
@@ -42,23 +42,22 @@ class UpdateProfilModel {
 
 class Data {
   final int id;
-  final String reference;
-  final String typeUser;
-  final String name;
-  final String lastname;
-  final String email;
-  final String contact;
-  final dynamic emailVerifiedAt;
+  final String? reference;
+  final String? typeUser;
+  final String? name;
+  final String? lastname;
+  final String? email;
+  final String? contact;
+  final dynamic? emailVerifiedAt;
   final int isActive;
   final int isBanned;
   final int isValidated;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final dynamic deletedAt;
+  final String? createdAt;
+  final String? updatedAt;
+  final dynamic? deletedAt;
   final int connections;
-  final dynamic profilPic;
-  final dynamic deviceToken;
-  final Mecanicien mecanicien;
+  final String? profilPic;
+  final Mecanicien? mecanicien;
 
   Data({
     required this.id,
@@ -68,17 +67,16 @@ class Data {
     required this.lastname,
     required this.email,
     required this.contact,
-    required this.emailVerifiedAt,
+    this.emailVerifiedAt,
     required this.isActive,
     required this.isBanned,
     required this.isValidated,
     required this.createdAt,
     required this.updatedAt,
-    required this.deletedAt,
+    this.deletedAt,
     required this.connections,
     required this.profilPic,
-    required this.deviceToken,
-    required this.mecanicien,
+    this.mecanicien,
   });
 
   Data copyWith({
@@ -93,12 +91,11 @@ class Data {
     int? isActive,
     int? isBanned,
     int? isValidated,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    String? createdAt,
+    String? updatedAt,
     dynamic deletedAt,
     int? connections,
-    dynamic profilPic,
-    dynamic deviceToken,
+    String? profilPic,
     Mecanicien? mecanicien,
   }) =>
       Data(
@@ -118,7 +115,6 @@ class Data {
         deletedAt: deletedAt ?? this.deletedAt,
         connections: connections ?? this.connections,
         profilPic: profilPic ?? this.profilPic,
-        deviceToken: deviceToken ?? this.deviceToken,
         mecanicien: mecanicien ?? this.mecanicien,
       );
 
@@ -127,24 +123,23 @@ class Data {
   String toRawJson() => json.encode(toJson());
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    reference: json["reference"],
-    typeUser: json["type_user"],
-    name: json["name"],
-    lastname: json["lastname"],
-    email: json["email"],
-    contact: json["contact"],
+    id: json["id"] ?? 0,
+    reference: json["reference"] ?? '',
+    typeUser: json["type_user"] ?? '',
+    name: json["name"] ?? '',
+    lastname: json["lastname"] ?? '',
+    email: json["email"] ?? '',
+    contact: json["contact"] ?? '',
     emailVerifiedAt: json["email_verified_at"],
-    isActive: json["is_active"],
-    isBanned: json["is_banned"],
-    isValidated: json["is_validated"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    isActive: json["is_active"] ?? 0,
+    isBanned: json["is_banned"] ?? 0,
+    isValidated: json["is_validated"] ?? 0,
+    createdAt: json["created_at"] ?? '',
+    updatedAt: json["updated_at"] ?? '',
     deletedAt: json["deleted_at"],
-    connections: json["connections"],
-    profilPic: json["profil_pic"],
-    deviceToken: json["device_token"],
-    mecanicien: Mecanicien.fromJson(json["mecanicien"]),
+    connections: json["connections"] ?? 0,
+    profilPic: json["profil_pic"] ?? '',
+    mecanicien: json["mecanicien"] != null ? Mecanicien.fromJson(json["mecanicien"]) : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -159,33 +154,32 @@ class Data {
     "is_active": isActive,
     "is_banned": isBanned,
     "is_validated": isValidated,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt,
+    "updated_at": updatedAt,
     "deleted_at": deletedAt,
     "connections": connections,
     "profil_pic": profilPic,
-    "device_token": deviceToken,
-    "mecanicien": mecanicien.toJson(),
+    "mecanicien": mecanicien?.toJson(),
   };
 }
 
 class Mecanicien {
   final int id;
   final int userId;
-  final String name;
-  final String lastname;
-  final String email;
-  final String contact;
-  final dynamic contact2;
-  final String adresse;
-  final String ville;
-  final String numCni;
-  final dynamic photo;
+  final String? name;
+  final String? lastname;
+  final String? email;
+  final String? contact;
+  final dynamic? contact2;
+  final String? adresse;
+  final String? ville;
+  final String? numCni;
+  final dynamic? photo;
   final int societeId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final dynamic deletedAt;
-  final String speciality;
+  final String? speciality;
   final int experience;
   final Societe societe;
   final List<Contact> contacts;
@@ -219,15 +213,15 @@ class Mecanicien {
     String? lastname,
     String? email,
     String? contact,
-    dynamic contact2,
+    dynamic? contact2,
     String? adresse,
     String? ville,
     String? numCni,
-    dynamic photo,
+    dynamic? photo,
     int? societeId,
     DateTime? createdAt,
     DateTime? updatedAt,
-    dynamic deletedAt,
+    dynamic? deletedAt,
     String? speciality,
     int? experience,
     Societe? societe,
@@ -294,8 +288,8 @@ class Mecanicien {
     "num_cni": numCni,
     "photo": photo,
     "societe_id": societeId,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
     "deleted_at": deletedAt,
     "speciality": speciality,
     "experience": experience,
@@ -305,11 +299,11 @@ class Mecanicien {
 }
 
 class Contact {
-  final int id;
-  final int mecanicienId;
-  final String phone;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? id;
+  final int? mecanicienId;
+  final String? phone;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Contact({
     required this.id,
@@ -350,24 +344,24 @@ class Contact {
     "id": id,
     "mecanicien_id": mecanicienId,
     "phone": phone,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }
 
 class Societe {
-  final int id;
-  final String reference;
-  final String libelle;
-  final String adresse;
-  final dynamic nomGerant;
-  final dynamic contactGerant;
-  final dynamic phone;
-  final String presentation;
-  final String lieu;
-  final dynamic deletedAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? id;
+  final String? reference;
+  final String? libelle;
+  final String? adresse;
+  final dynamic? nomGerant;
+  final dynamic? contactGerant;
+  final dynamic? phone;
+  final String? presentation;
+  final String? lieu;
+  final dynamic? deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Societe({
     required this.id,
@@ -443,7 +437,7 @@ class Societe {
     "presentation": presentation,
     "lieu": lieu,
     "deleted_at": deletedAt,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
   };
 }

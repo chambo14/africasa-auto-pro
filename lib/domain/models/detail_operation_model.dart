@@ -35,7 +35,7 @@ class DetailOperationModel {
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data!.toJson(),
+    "data": data?.toJson(),
     "message": message,
   };
 }
@@ -71,13 +71,13 @@ class Operation {
   final int id;
   final String reference;
   final DateTime dateOperation;
-  final String libelle;
-  final String motif;
+  final String? libelle;
+  final String? motif;
   final int amount;
-  final String typeOperation;
+  final String? typeOperation;
   final dynamic fichier;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final int userId;
 
   Operation({
@@ -103,8 +103,8 @@ class Operation {
     int? amount,
     String? typeOperation,
     dynamic fichier,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     int? userId,
   }) =>
       Operation(
@@ -134,8 +134,8 @@ class Operation {
     amount: json["amount"],
     typeOperation: json["type_operation"],
     fichier: json["fichier"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
     userId: json["user_id"],
   );
 
@@ -148,8 +148,8 @@ class Operation {
     "amount": amount,
     "type_operation": typeOperation,
     "fichier": fichier,
-    "created_at": createdAt,
-    "updated_at": updatedAt,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
     "user_id": userId,
   };
 }

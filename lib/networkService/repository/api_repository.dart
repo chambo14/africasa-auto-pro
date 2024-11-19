@@ -211,6 +211,7 @@ class ApiRepository {
         return UpdateProfilModel();
       }
     } catch (e) {
+      print('quelle erreur $e');
       return UpdateProfilModel(message: ErrorResponse.checkMessage(e));
     }
   }

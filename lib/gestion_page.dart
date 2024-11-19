@@ -4,6 +4,7 @@ import 'package:africasa_mecano/provider/list_operation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
 
 import 'menu_page.dart';
@@ -17,6 +18,8 @@ class GestionPage extends ConsumerStatefulWidget {
 
 class _GestionPageState extends ConsumerState<GestionPage> {
   late ListOperationProvider _listOperationProvider = ListOperationProvider();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -54,6 +57,8 @@ class _GestionPageState extends ConsumerState<GestionPage> {
   Widget Operation(){
     return Consumer(builder: (context, ref, child){
       _listOperationProvider = ref.watch(listOperationProvider);
+
+      _listOperationProvider.listOperationModel!.data!.allOperations.sort((a, b) => b.createdAt.compareTo(a.createdAt),);
       if (_listOperationProvider.listOperationModel == null) {
         // Retourne un loader pendant le chargement
         return Padding(
@@ -103,7 +108,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
       return SizedBox(
         height: 700,
         child: ListView.builder(
-          itemCount: data.allOperations.length,
+          itemCount: data.allOperations.length > 40 ? 40 : data.allOperations.length ,
           itemBuilder: (BuildContext context, int index) {
             var item = data.allOperations[index];
             return Column(
@@ -112,47 +117,61 @@ class _GestionPageState extends ConsumerState<GestionPage> {
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailOperationPage(response: data)));
                   },
-                  child: Container(
-                    height: 130,
-                    width: 350,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade100),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.shade100,
-                    ),
-                    child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text('Type operation: ', style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
-                            Text(item.typeOperation.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Date: ', style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
-                            Text(item.dateOperation.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
+                  child: RefreshIndicator(
+                    color: Colors.white,
+                    backgroundColor: Colors.blue,
+                    strokeWidth: 4.0,
+                    onRefresh: () async {
+                      // Replace this delay with the code to be executed during refresh
+                      // and return a Future when code finishes execution.
+                      return Future<void>.delayed(const Duration(seconds: 3));
+                    },
+                    child: Container(
+                      height: 130,
+                      width: 350,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade100),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey.shade100,
+                      ),
+                      child:  Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text('Type operation: ', style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
+                              Text(item.typeOperation.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
+                            ],
+                          ),
+                          const SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              Text('Date: ', style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
+                              Text(DateFormat('yyyy-mm-dd').format(item.dateOperation), style: GoogleFonts.poppins(fontSize: 15,),),
 
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Reference: ', style: GoogleFonts.poppins(fontSize: 15,color: Colors.blue.shade700),),
-                            Text(item.motif.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text("Montant: ", style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
-                            Text(item.amount.toString(), style: GoogleFonts.poppins(fontSize: 15),),
-                            const SizedBox(width: 2,),
-                            Text("FCFA", style: GoogleFonts.poppins(fontSize: 15),),
-                          ],
-                        )
+                            ],
+                          ),
+                          const SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              Text('Reference: ', style: GoogleFonts.poppins(fontSize: 15,color: Colors.blue.shade700),),
+                              Text(item.motif.toString(), style: GoogleFonts.poppins(fontSize: 15,),),
+                            ],
+                          ),
+                          const SizedBox(height: 5,),
+                          Row(
+                            children: [
+                              Text("Montant: ", style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
+                              Text(item.amount.toString(), style: GoogleFonts.poppins(fontSize: 15),),
+                              const SizedBox(width: 2,),
+                              Text("FCFA", style: GoogleFonts.poppins(fontSize: 15),),
+                            ],
+                          ),
+                          const SizedBox(height: 5,),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

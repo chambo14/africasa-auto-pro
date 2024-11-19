@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:africasa_mecano/profil_page.dart';
 import 'package:africasa_mecano/provider/update_profil_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'core/components/dialog_alert.dart';
 import 'core/components/network_error_dialog.dart';
@@ -31,14 +34,75 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     _uploadProfileProvider = ref.read(updateProfileProvider);
     super.initState();
   }
+  File? _imageFile; // Pour stocker l'image sélectionnée
+
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      print('Erreur lors de la sélection de l\'image : $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.blue.shade50,
+        leading: IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilPage()));},icon: const Icon(Icons.arrow_back_ios),),
+        title: Text("Modifier profil", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500),),
+      ),
       body: SafeArea(child: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+        padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
         child: Column(
           children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // CircleAvatar for the image
+                CircleAvatar(
+                  radius: 80,
+                  backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
+                  child: _imageFile == null
+                      ? Icon(Icons.person, size: 80, color: Colors.grey)
+                      : null,
+                ),
+
+                // Positioned IconButton for overlay
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: Colors.grey.shade400),
+                      color: Colors.white
+                    ),
+                    child: IconButton(
+                      onPressed: _pickImage,
+                      icon: Icon(
+                        Icons.add_a_photo,
+                        color: Colors.blue.shade500,
+                        size: 30,
+                      ),
+                      iconSize: 30,
+                      color: Colors.blue,
+                      splashRadius: 10,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30,),
             nameField(),
             const SizedBox(height: 20,),
             lastnameField(),
@@ -222,7 +286,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             color: Colors.blue.shade500,
             borderRadius: BorderRadius.circular(10)
         ),
-        child: Center(child: Text("Se connecter", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
+        child: Center(child: Text("Valider", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
       ),
     );
   }

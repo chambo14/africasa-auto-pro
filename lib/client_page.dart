@@ -28,6 +28,7 @@ class _ClientPageState extends ConsumerState<ClientPage> {
   late DetailAppointmentProvider _detailAppointmentProvider = DetailAppointmentProvider();
   late ApproveProvider _approveModel = ApproveProvider();
   late RefusedProvider _refusedProvider = RefusedProvider();
+  final String number = '+2250505544432';
 
   @override
   void initState() {
@@ -40,13 +41,21 @@ class _ClientPageState extends ConsumerState<ClientPage> {
     });
     super.initState();
   }
-  _launchPhoneApp(Uri uri) async {
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      debugPrint('###### Could not launch ');
-      throw 'Impossible de lancer l\'appel';
-    }
+  Future<void> _launchPhoneApp(String phoneNumber) async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+
+   try{
+     if (await canLaunchUrl(phoneUri)) {
+       await launchUrl(phoneUri);
+     } else {
+       throw 'Impossible de lancer l\'appel vers $phoneNumber';
+     }
+   }catch(e){
+     debugPrint('Exception : $e');
+   }
   }
 
   @override
@@ -73,7 +82,8 @@ class _ClientPageState extends ConsumerState<ClientPage> {
                 },
                 child: IconButton(
                   onPressed: (){
-                    _launchPhoneApp(Uri(scheme: 'tel', path: '+225${info.data!.appointment.client.contact}'));
+                     _launchPhoneApp( '+225${info.data!.appointment.client.contact}' );
+                   // _launchPhoneApp( number );
                   },
                   icon: Icon(Icons.phone, color: Colors.blue.shade400,),
                 ),

@@ -95,6 +95,7 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
                     ],
                   ),
                   const SizedBox(height: 20,),
+                  button()
 
                 ],
               );
@@ -118,7 +119,7 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
             color: Colors.blue.shade500,
             borderRadius: BorderRadius.circular(10)
         ),
-        child: Center(child: Text("Se connecter", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
+        child: Center(child: Text("Modifier mon profil", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
       ),
     );
   }

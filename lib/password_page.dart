@@ -1,4 +1,5 @@
 import 'package:africasa_mecano/core/components/network_error_dialog.dart';
+import 'package:africasa_mecano/home_page.dart';
 import 'package:africasa_mecano/menu_page.dart';
 import 'package:africasa_mecano/provider/password_provider.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,12 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.blue.shade50,
+        leading: IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));},icon: const Icon(Icons.arrow_back_ios),),
+        title: Text("Modifier mot de passe", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500),),
+      ),
       body: SafeArea(child: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         child: Column(
