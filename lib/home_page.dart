@@ -450,7 +450,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: motifController,
-                  keyboardType: TextInputType.visiblePassword,
+                  keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Svp entrez votre motif';
