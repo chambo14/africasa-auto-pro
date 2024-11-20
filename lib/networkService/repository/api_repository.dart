@@ -198,9 +198,6 @@ class ApiRepository {
       );
 
       if (response.statusCode == 200 || response.statusCode == 400) {
-        if (kDebugMode) {
-          print(ResponseModel.fromJson(response.data));
-        }
         UpdateProfilModel profil = UpdateProfilModel.fromJson(response.data);
         return profil;
       } else {
