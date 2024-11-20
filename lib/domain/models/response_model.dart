@@ -28,7 +28,7 @@ class ResponseModel {
 
   factory ResponseModel.fromJson(Map<String, dynamic> json) => ResponseModel(
     success: json["success"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"],
   );
 
@@ -40,12 +40,12 @@ class ResponseModel {
 }
 
 class Data {
-  final String token;
-  final User user;
+  final String? token;
+  final User? user;
 
   Data({
-    required this.token,
-    required this.user,
+     this.token,
+     this.user,
   });
 
   Data copyWith({
@@ -68,7 +68,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
     "token": token,
-    "user": user.toJson(),
+    "user": user?.toJson(),
   };
 }
 

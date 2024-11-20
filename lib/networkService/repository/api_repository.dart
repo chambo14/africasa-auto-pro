@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
@@ -196,6 +197,8 @@ class ApiRepository {
           },
         ),
       );
+
+      log(response.data.toString());
 
       if (response.statusCode == 200 || response.statusCode == 400) {
         UpdateProfilModel profil = UpdateProfilModel.fromJson(response.data);

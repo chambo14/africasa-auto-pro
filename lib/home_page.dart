@@ -582,7 +582,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: motifRetraitController,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Svp entrez votre motif';
@@ -613,7 +613,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: sortieController,
-                  keyboardType: TextInputType.visiblePassword,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Svp entrez votre gain';
@@ -719,7 +719,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
 
       operationSubmit(formattedDate,libelleRetraitController.text, motifRetraitController.text, sortieController.text, operation_type).then((value) {
-        
+        _listOperationProvider.getListOperation(); 
       });
 
     } else {
