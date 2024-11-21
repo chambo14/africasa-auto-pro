@@ -37,7 +37,7 @@ class _ClientPageState extends ConsumerState<ClientPage> {
       _approveModel = ref.read(approveProvider);
       _refusedProvider = ref.read(refusedProvider);
       _detailAppointmentProvider.infoAppointment(
-          id: widget.data.client.id.toInt());
+          id: widget.data.client!.id.toInt());
     });
     super.initState();
   }

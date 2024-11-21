@@ -14,8 +14,8 @@ class UpdateProfilProvider extends ChangeNotifier {
   final ApiRepository _apiRepository = ApiRepository();
 
   Future<UpdateProfilModel?> updateProfile(
-      {required String name, required String lastname, required String ville, required String adresse, required String num_cni}) async {
-    final response = await _apiRepository.UpdateProfil(name, lastname, ville, adresse, num_cni);
+      {required String name, required String lastname,  required String adresse, required String speciality}) async {
+    final response = await _apiRepository.UpdateProfil(name, lastname, adresse, speciality);
     notifyListeners();
     if (response == null) {
       return null;

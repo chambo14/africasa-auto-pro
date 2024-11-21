@@ -44,18 +44,18 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
               }
               return Column(
                 children: [
-                  Container(
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      image:  DecorationImage(
-                        image: NetworkImage(infoClient.profilPic!= null && infoClient.profilPic.isNotEmpty?infoClient.profilPic.toString(): 'https://via.placeholder.com/150'),
-                        fit: BoxFit.cover,
+                  CircleAvatar(
+                    radius: 80, // Rayon pour obtenir un diamètre de 150
+                    backgroundColor: Colors.grey.shade300, // Couleur de bordure ou de fond par défaut
+                    child: ClipOval( // Utilisation de ClipOval pour garantir que l'image reste circulaire
+                      child: FadeInImage(
+                        placeholder: AssetImage('assets/images/loader.gif'), // Vous pouvez remplacer cela par un asset image de votre choix
+                        image: NetworkImage(infoClient.profilPic),
+                        width: 160, // Diamètre du CircleAvatar
+                        height: 160,
+                        fit: BoxFit.cover, // Remplir l'espace sans déformer l'image
                       ),
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(70),
                     ),
-
                   ),
                   const SizedBox(height: 30,),
                   Row(

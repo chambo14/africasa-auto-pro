@@ -13,6 +13,7 @@ import 'core/components/network_error_dialog.dart';
 import 'core/utils/check_network.dart';
 import 'core/utils/strings.dart';
 import 'domain/models/update_profile_model.dart';
+import 'provider/update_picture_provider.dart';
 
 class UpdateProfilePage extends ConsumerStatefulWidget {
   const UpdateProfilePage({super.key});
@@ -24,14 +25,15 @@ class UpdateProfilePage extends ConsumerStatefulWidget {
 class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   TextEditingController name = TextEditingController();
   TextEditingController lastname = TextEditingController();
-  TextEditingController ville = TextEditingController();
+  TextEditingController speciality = TextEditingController();
   TextEditingController adresse = TextEditingController();
-  TextEditingController cni = TextEditingController();
   late UpdateProfilProvider _uploadProfileProvider = UpdateProfilProvider();
+  late UpdatePictureProvider _updatePictureProvider = UpdatePictureProvider();
 
   @override
   void initState() {
     _uploadProfileProvider = ref.read(updateProfileProvider);
+    _updatePictureProvider = ref.read(pictureProvider);
     super.initState();
   }
   File? _imageFile; // Pour stocker l'image sélectionnée
@@ -111,8 +113,6 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             const SizedBox(height: 20,),
             adresseField(),
             const SizedBox(height: 20,),
-            cniField(),
-            const SizedBox(height: 20,),
             changeButton()
           ],
         ),
@@ -184,16 +184,16 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   }
   Widget villeField() {
     return TextFormField(
-      controller: ville,
+      controller: speciality,
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Svp entrez votre ville';
+          return 'Svp entrez votre spécialité';
         }
         return null;
       },
       decoration: InputDecoration(
-        hintText: "Entrez votre ville",
+        hintText: "Entrez votre spécialité",
         fillColor: Colors.white,
         filled: true,
         hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
@@ -244,36 +244,6 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
       ),
     );
   }
-  Widget cniField() {
-    return TextFormField(
-      controller: cni,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return ' entrez votre numero cni';
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        hintText: "Entrez votre numero cni",
-        fillColor: Colors.white,
-        filled: true,
-        hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-    );
-  }
   Widget changeButton(){
     return InkWell(
       onTap: (){
@@ -291,7 +261,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     );
   }
 
-  void updateProfileSubmit( String name, String lastname, String ville, String adresse, String cni) async {
+  void updateProfileSubmit( String name, String lastname, String speciality, String adresse) async {
     var checkInternet = checkNetwork();
 
     if (await checkInternet) {
@@ -302,7 +272,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             return const DialogAlert();
           });
       var dataResponse =
-      await _uploadProfileProvider.updateProfile(name: name, lastname: lastname, ville: ville, adresse: adresse, num_cni: cni, );
+      await _uploadProfileProvider.updateProfile(name: name, lastname: lastname, adresse: adresse, speciality: speciality, );
 
       if (dataResponse == null) {
         return;
@@ -335,22 +305,104 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     }
   }
   changeProfile(){
-    if (name.text.isNotEmpty || lastname.text.isNotEmpty || ville.text.isNotEmpty|| adresse.text.isNotEmpty || cni.text.isNotEmpty) {
+    if (name.text.isNotEmpty || lastname.text.isNotEmpty || speciality.text.isNotEmpty|| adresse.text.isNotEmpty) {
 
+      updateProfileSubmit(name.text, lastname.text , speciality.text, adresse.text,);
 
-      updateProfileSubmit(name.text, lastname.text , ville.text, adresse.text, cni.text);
+      if (_imageFile != null) {
+        uploadSubmit(_imageFile!); // Call image upload function if an image is selected
+      }
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: const Duration(seconds: 3),
           content: Text(
-            strings.codeSecret,
+            'Veuillez remplir les champs obligatoires et sélectionner une image.',
             style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
                 color: Colors.white),
           )));
-      // Navigator.pop(context);
+    }
+  }
+
+  // void changeProfile() {
+  //   if (name.text.isNotEmpty || lastname.text.isNotEmpty || ville.text.isNotEmpty || adresse.text.isNotEmpty || cni.text.isNotEmpty || _imageFile != null) {
+  //     // Proceed with profile update submission
+  //     updateProfileSubmit(name.text, lastname.text, ville.text, adresse.text, cni.text);
+  //
+  //     // If an image is selected, upload it as well
+  //     if (_imageFile != null) {
+  //       uploadSubmit(_imageFile!); // Call image upload function if an image is selected
+  //     }
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         duration: const Duration(seconds: 3),
+  //         content: Text(
+  //           'Veuillez remplir les champs obligatoires et sélectionner une image.',
+  //           style: GoogleFonts.poppins(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w400,
+  //               color: Colors.white),
+  //         )));
+  //   }
+  // }
+  void uploadSubmit( File picture) async {
+    var checkInternet = checkNetwork();
+
+    if (await checkInternet) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return const DialogAlert();
+          });
+      var dataResponse =
+      await _updatePictureProvider.updatePicture(picture: picture);
+
+      if (dataResponse == null) {
+        return;
+      }
+      if (dataResponse.success == true) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 5),
+            content: Text(dataResponse.message.toString(),
+                style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white))));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 5),
+            content: Text(dataResponse.message.toString(),
+                style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white))));
+        //codePin.clear();
+        Navigator.of(context).pop();
+      }
+    }
+
+
+    else {
+      showDialog(
+          context: context, builder: (context) => const NetworkErrorDialog());
+    }
+  }
+
+  void checkUpload() {
+    if (_imageFile != null ) {
+      uploadSubmit(_imageFile!);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Veuillez sélectionner une photo",
+            style: GoogleFonts.poppins(fontSize: 14),
+          ),
+        ),
+      );
     }
   }
 }

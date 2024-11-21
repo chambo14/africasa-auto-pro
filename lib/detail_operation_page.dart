@@ -92,7 +92,7 @@ class _DetailOperationPageState extends ConsumerState<DetailOperationPage> {
                            Text("Montant:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
                            const SizedBox(width: 10,),
                            Text(info.data!.operation.amount.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
-                           Text("FCFA:", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
+                           Text("FCFA", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.grey.shade700)),
                          ],
                        ),
                      ],

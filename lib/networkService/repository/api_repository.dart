@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
@@ -7,6 +8,7 @@ import 'package:africasa_mecano/domain/models/list_operation_model.dart';
 import 'package:africasa_mecano/domain/models/operation_model.dart';
 import 'package:africasa_mecano/domain/models/password_model.dart';
 import 'package:africasa_mecano/domain/models/reset_model.dart';
+import 'package:africasa_mecano/domain/models/update_picture_model.dart';
 
 import 'package:dio/dio.dart';
 
@@ -168,7 +170,7 @@ class ApiRepository {
     }
   }
 
-  Future<UpdateProfilModel?> UpdateProfil(String name, String lastname, String ville, String adresse, String num_cni) async {
+  Future<UpdateProfilModel?> UpdateProfil(String name, String lastname, String adresse, String speciality) async {
     String url = Api.baseUrl + ApiEndPoints.updateProfil;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var tokens = prefs.getString("tokens");
@@ -181,9 +183,8 @@ class ApiRepository {
         data: {
           "name": name,
           "lastname": lastname,
-          "ville": ville,
           "adresse": adresse,
-          "num_cni": num_cni
+          "speciality": speciality
         },
         options: Options(
           headers: {
@@ -774,6 +775,65 @@ class ApiRepository {
     } catch (e) {
       print("la valeur de $e");
       return UserInfoModel();
+    }
+  }
+
+  Future<UpdatePictureModel?> UpdatePictureProfile (File profil) async {
+    String url = Api.baseUrl + ApiEndPoints.updatePicture;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("tokens");
+
+    if (kDebugMode) {
+      print("URL de l'API: $url");
+    }
+
+    try {
+      // Préparation du FormData
+      FormData formData = FormData.fromMap({
+        "profil_pic": await MultipartFile.fromFile(
+          profil.path,
+          filename: profil.path.split('/').last,
+        ),
+
+      });
+
+      // Appel API
+      final response = await apiUtils.post(
+        url: url,
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "multipart/form-data",
+          },
+          followRedirects: false,
+          validateStatus: (status) => status! < 500,
+        ),
+      );
+
+      // Vérification et gestion des réponses
+      if (response.statusCode == 200) {
+        if (kDebugMode) {
+          print("Réponse de l'API : ${response.data}");
+        }
+        return UpdatePictureModel.fromJson(response.data);
+      } else if (response.statusCode == 400) {
+        if (kDebugMode) {
+          print("Erreur côté client : ${response.data}");
+        }
+        return UpdatePictureModel.fromJson(response.data);
+      } else {
+        if (kDebugMode) {
+          print("Erreur inconnue : ${response.statusCode}");
+        }
+        return UpdatePictureModel(
+            message: "Erreur : Code ${response.statusCode}, veuillez réessayer.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Exception attrapée : $e");
+      }
+      return UpdatePictureModel(message: ErrorResponse.checkMessage(e));
     }
   }
 }

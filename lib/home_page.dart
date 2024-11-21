@@ -136,19 +136,49 @@ class _HomePageState extends ConsumerState<HomePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 65,
-                      width: 65,
-                      decoration: BoxDecoration(
-                        image:  DecorationImage(
-                          image: NetworkImage(infoClient.profilPic!= null && infoClient.profilPic.isNotEmpty?infoClient.profilPic.toString(): 'https://via.placeholder.com/150'),
+                    // Container(
+                    //   height: 65,
+                    //   width: 65,
+                    //   decoration: BoxDecoration(
+                    //     image:  DecorationImage(
+                    //       image: NetworkImage(infoClient.profilPic!= null && infoClient.profilPic.isNotEmpty?infoClient.profilPic.toString(): 'https://via.placeholder.com/150'),
+                    //       fit: BoxFit.cover,
+                    //     ),
+                    //     border: Border.all(color: Colors.grey.shade300),
+                    //     borderRadius: BorderRadius.circular(30),
+                    //   ),
+                    //
+                    // ),
+                    CircleAvatar(
+                      radius: 32.5, // Rayon pour correspondre à 65x65
+                      backgroundColor: Colors.grey.shade300, // Couleur de bordure
+                      child: ClipOval(
+                        child: Image.network(
+                          infoClient.profilPic != null && infoClient.profilPic.isNotEmpty
+                              ? infoClient.profilPic
+                              : 'https://via.placeholder.com/150',
+                          width: 65,
+                          height: 65,
                           fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child; // L'image est chargée
+                            }
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                            return Icon(Icons.person, size: 40, color: Colors.grey.shade500); // Fallback en cas d'erreur
+                          },
                         ),
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(30),
                       ),
-
                     ),
+
                     const SizedBox(height: 10,),
                     Row(
                       children: [
@@ -157,13 +187,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         Text(infoClient.mecanicien!.lastname.toString(), style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.blue.shade500),)
                       ],
                     ),
-                    Row(
-                      children: [
-                        Text("Pro en", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.grey.shade700),),
-                        const SizedBox(width: 5,),
-                        Text(infoClient.mecanicien!.speciality.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.grey.shade700),)
-                      ],
-                    )
+                    Text(infoClient.mecanicien!.speciality.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.grey.shade700),)
                   ],
                 );
               },),
@@ -273,14 +297,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ],
                           annotations: <GaugeAnnotation>[
                             GaugeAnnotation(
-                              widget: Container(
-                                child: Text(
-                                  '${differencePrix.toStringAsFixed(0)} Fcfa',
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
+                              widget: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    NumberFormat.currency(
+                                      locale: 'fr', // Changez la langue si nécessaire
+                                      symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
+                                      decimalDigits: 0, // Nombre de chiffres après la virgule
+                                    ).format(differencePrix), // Formate le nombre avec séparateurs des milliers
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.grey.shade900,
+                                      fontSize: 20,
+                                    ),
                                   ),
-                                ),
+                                  Text("Fcfa",  style: GoogleFonts.poppins(
+                                    color: Colors.grey.shade900,
+                                    fontSize: 20,
+                                  ),)
+                                ],
                               ),
                               angle: 90,
                               positionFactor: 0.5,
@@ -313,10 +348,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                             ),
                           ),
-                          Text(totalPrix.toStringAsFixed(0)
-                            ,  // Affiche avec deux décimales
+                          const SizedBox(height: 5,),
+
+                          // Text(totalPrix.toStringAsFixed(0)
+                          //   ,  // Affiche avec deux décimales
+                          //   style: GoogleFonts.poppins(
+                          //     color: Colors.grey.shade500,
+                          //     fontSize: 20,
+                          //   ),
+                          // ),
+                          Text(
+                            NumberFormat.currency(
+                              locale: 'fr', // Changez la langue si nécessaire
+                              symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
+                              decimalDigits: 0, // Nombre de chiffres après la virgule
+                            ).format(totalPrix), // Formate le nombre avec séparateurs des milliers
                             style: GoogleFonts.poppins(
-                              color: Colors.grey.shade500,
+                              color: Colors.grey.shade700,
                               fontSize: 20,
                             ),
                           ),
@@ -332,21 +380,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blue.shade500),
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue.shade700,
+                                color: Colors.white,
                               ),
                               child: Center(
                                 child: Text(
                                   "-",
                                   style: GoogleFonts.poppins(
-                                      color: Colors.white, fontSize: 25),
+                                       fontSize: 25, color: Colors.blue.shade500, fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
                           ),
-                          Text(totalPrixSortie.toStringAsFixed(0),
-                              style: GoogleFonts.poppins(
-                                  color: Colors.grey.shade500, fontSize: 20))
+                          const SizedBox(height: 5,),
+                          // Text(totalPrixSortie.toStringAsFixed(0),
+                          //     style: GoogleFonts.poppins(
+                          //         color: Colors.grey.shade500, fontSize: 20)),
+
+                          Text(
+                            NumberFormat.currency(
+                              locale: 'fr', // Changez la langue si nécessaire
+                              symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
+                              decimalDigits: 0, // Nombre de chiffres après la virgule
+                            ).format(totalPrixSortie), // Formate le nombre avec séparateurs des milliers
+                            style: GoogleFonts.poppins(
+                              color: Colors.red.shade400,
+                              fontSize: 20,
+                            ),
+                          ),
                         ],
                       ),
                     ],

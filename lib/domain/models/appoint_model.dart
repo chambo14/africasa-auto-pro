@@ -45,14 +45,14 @@ class Datum {
   final int clientId;
   final int mecanicienId;
   final DateTime dateRdv;
-  final String hourStartRdv;
-  final String hourEndRdv;
+  final String? hourStartRdv;
+  final String? hourEndRdv;
   final String? status;
   final String? isActive;
   final dynamic deletedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final Client client;
+  final Client? client;
 
   Datum({
     required this.id,
@@ -129,17 +129,17 @@ class Datum {
     "deleted_at": deletedAt,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
-    "client": client.toJson(),
+    "client": client?.toJson(),
   };
 }
 
 class Client {
   final int id;
   final int userId;
-  final String name;
-  final String lastname;
-  final String email;
-  final String contact;
+  final String? name;
+  final String? lastname;
+  final String? email;
+  final String? contact;
   final dynamic contact2;
   final dynamic adresse;
   final dynamic ville;
