@@ -197,7 +197,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
         fillColor: Colors.white,
         filled: true,
         hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
-        prefixIcon: Icon(Icons.pin_drop,color: Colors.grey.shade200,),
+        prefixIcon: Icon(Icons.info_rounded,color: Colors.grey.shade200,),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
           borderRadius: BorderRadius.circular(10.0),

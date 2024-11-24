@@ -141,9 +141,9 @@ class Client {
   final String? email;
   final String? contact;
   final dynamic contact2;
-  final dynamic adresse;
-  final dynamic ville;
-  final dynamic numCni;
+  final String? adresse;
+  final String? ville;
+  final String? numCni;
   final dynamic numPermis;
   final dynamic photo;
   final DateTime createdAt;
@@ -176,9 +176,9 @@ class Client {
     String? email,
     String? contact,
     dynamic contact2,
-    dynamic adresse,
-    dynamic ville,
-    dynamic numCni,
+    String? adresse,
+    String? ville,
+    String? numCni,
     dynamic numPermis,
     dynamic photo,
     DateTime? createdAt,
@@ -243,3 +243,5 @@ class Client {
     "deleted_at": deletedAt,
   };
 }
+
+

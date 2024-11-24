@@ -1,5 +1,7 @@
 import 'package:africasa_mecano/Update_profile_page.dart';
+import 'package:africasa_mecano/catalogue_page.dart';
 import 'package:africasa_mecano/home_page.dart';
+import 'package:africasa_mecano/list_catalogue_page.dart';
 import 'package:africasa_mecano/provider/info_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -95,7 +97,23 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
                     ],
                   ),
                   const SizedBox(height: 20,),
-                  button()
+                  button(),
+                  const SizedBox(height: 10,),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ListCataloguePage(id:infoClient.mecanicien!.id.toInt() )));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 320,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.blue.shade500,)
+                      ),
+                      child: Center(child: Text("Catalogue", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.blue.shade500),)),
+                    ),
+                  )
 
                 ],
               );
@@ -110,7 +128,6 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
     return InkWell(
       onTap: (){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const UpdateProfilePage()));
-       // checkInfoLogin();
       },
       child: Container(
         height: 50,
@@ -123,4 +140,6 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
       ),
     );
   }
+
+
 }

@@ -18,6 +18,8 @@ class ApiEndPoints {
   static const reset = "/api/reset-password";
   static const updateProfil = "/api/user/update";
   static const updatePicture = "/api/user/update-profil-pic";
+  static const uploadCatalog = "/api/user/catalogue/store";
+  static const listCatalogue = "/api/user/catalogues/";
 
 
 

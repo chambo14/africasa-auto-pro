@@ -81,6 +81,7 @@ class _BookingPageState extends ConsumerState<BookingPage> {
          ),
        );
      }
+     print("la valeur de $data");
      if (data == null || data.isEmpty) {
        return Padding(
          padding: const EdgeInsets.only(top:250.0),

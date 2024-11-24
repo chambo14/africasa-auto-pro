@@ -58,7 +58,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
     return Consumer(builder: (context, ref, child){
       _listOperationProvider = ref.watch(listOperationProvider);
 
-      _listOperationProvider.listOperationModel!.data!.allOperations.sort((a, b) => b.createdAt.compareTo(a.createdAt),);
+      _listOperationProvider.listOperationModel!.data?.allOperations.sort((a, b) => b.createdAt.compareTo(a.createdAt),);
       if (_listOperationProvider.listOperationModel == null) {
         // Retourne un loader pendant le chargement
         return Padding(
@@ -148,7 +148,7 @@ class _GestionPageState extends ConsumerState<GestionPage> {
                           Row(
                             children: [
                               Text('Date: ', style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade700),),
-                              Text(DateFormat('yyyy-mm-dd').format(item.dateOperation), style: GoogleFonts.poppins(fontSize: 15,),),
+                              Text(DateFormat('yyyy-MM-dd').format(item.dateOperation), style: GoogleFonts.poppins(fontSize: 15,),),
 
                             ],
                           ),

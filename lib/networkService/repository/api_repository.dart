@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:africasa_mecano/domain/models/approve_model.dart';
+import 'package:africasa_mecano/domain/models/catalogue_modele.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
 import 'package:africasa_mecano/domain/models/list_operation_model.dart';
+import 'package:africasa_mecano/domain/models/liste_catalogue_model.dart';
 import 'package:africasa_mecano/domain/models/operation_model.dart';
 import 'package:africasa_mecano/domain/models/password_model.dart';
 import 'package:africasa_mecano/domain/models/reset_model.dart';
@@ -441,6 +443,34 @@ class ApiRepository {
   }
 
 
+  // Future<AppointModel?> listAppoints() async {
+  //   String url = Api.baseUrl + ApiEndPoints.appoint;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var tokens = prefs.getString("tokens");
+  //   if (kDebugMode) {
+  //     print(url);
+  //   }
+  //   try {
+  //     final response = await apiUtils.get(
+  //         url: url,
+  //         options: Options(headers: {"Authorization": "Bearer $tokens"}));
+  //     if (response.statusCode == 200) {
+  //       AppointModel apppointMOdel = AppointModel.fromJson(response.data);
+  //       print('mecano a pour valeur $apppointMOdel');
+  //       return apppointMOdel;
+  //     } else {
+  //       Map<String, dynamic> map = json.decode(response.data);
+  //       if (kDebugMode) {
+  //         print(map["message"]);
+  //       }
+  //       return AppointModel();
+  //     }
+  //   } catch (e) {
+  //     print("la valeur de $e");
+  //     return AppointModel();
+  //   }
+  // }
+
   Future<AppointModel?> listAppoints() async {
     String url = Api.baseUrl + ApiEndPoints.appoint;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -453,9 +483,9 @@ class ApiRepository {
           url: url,
           options: Options(headers: {"Authorization": "Bearer $tokens"}));
       if (response.statusCode == 200) {
-        AppointModel apppointMOdel = AppointModel.fromJson(response.data);
-        print('mecano a pour valeur $apppointMOdel');
-        return apppointMOdel;
+        AppointModel appoint = AppointModel.fromJson(response.data as Map<String, dynamic>);
+        print('mecano a pour valeur $appoint');
+        return appoint;
       } else {
         Map<String, dynamic> map = json.decode(response.data);
         if (kDebugMode) {
@@ -468,6 +498,7 @@ class ApiRepository {
       return AppointModel();
     }
   }
+
 
   Future<OperationModel?> doOperation(String date_operation, String libelle, String motif, String amount, String type_operation) async {
     String url = Api.baseUrl + ApiEndPoints.operations;
@@ -834,6 +865,95 @@ class ApiRepository {
         print("Exception attrapée : $e");
       }
       return UpdatePictureModel(message: ErrorResponse.checkMessage(e));
+    }
+  }
+
+  Future<CatalogueModel?> rechargedCatalogue (int mecanicienId, File image) async {
+    String url = Api.baseUrl + ApiEndPoints.uploadCatalog;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("tokens");
+
+    if (kDebugMode) {
+      print("URL de l'API: $url");
+    }
+
+    try {
+      // Préparation du FormData
+      FormData formData = FormData.fromMap({
+        "photo[]": await MultipartFile.fromFile(
+          image.path,
+          filename: image.path.split('/').last,
+        ),
+        "mecanicien_id": mecanicienId,
+      });
+
+      // Appel API
+      final response = await apiUtils.post(
+        url: url,
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "multipart/form-data",
+          },
+          followRedirects: false,
+          validateStatus: (status) => status! < 500,
+        ),
+      );
+
+      // Vérification et gestion des réponses
+      if (response.statusCode == 200) {
+        if (kDebugMode) {
+          print("Réponse de l'API : ${response.data}");
+        }
+        return CatalogueModel.fromJson(response.data);
+      } else if (response.statusCode == 400) {
+        if (kDebugMode) {
+          print("Erreur côté client : ${response.data}");
+        }
+        return CatalogueModel.fromJson(response.data);
+      } else {
+        if (kDebugMode) {
+          print("Erreur inconnue : ${response.statusCode}");
+        }
+        return CatalogueModel(
+            message: "Erreur : Code ${response.statusCode}, veuillez réessayer.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Exception attrapée : $e");
+      }
+      return CatalogueModel
+        (message: ErrorResponse.checkMessage(e));
+    }
+  }
+
+  Future<ListCatalogueModel?> getListCatalogue(int id) async {
+
+    String url = "${Api.baseUrl}${ApiEndPoints.listCatalogue}$id";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.get(
+          url: url,
+          options: Options(headers: {"Authorization": "Bearer $tokens"}));
+      if (response.statusCode == 200) {
+        ListCatalogueModel _mecanoModel = ListCatalogueModel.fromJson(response.data);
+        print('mecano a pour valeur $_mecanoModel');
+        return _mecanoModel;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return ListCatalogueModel();
+      }
+    } catch (e) {
+      print("la valeur de $e");
+      return ListCatalogueModel();
     }
   }
 }

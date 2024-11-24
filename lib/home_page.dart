@@ -1,6 +1,7 @@
 import 'package:africasa_mecano/booking_page.dart';
 import 'package:africasa_mecano/domain/models/list_operation_model.dart';
 import 'package:africasa_mecano/gestion_page.dart';
+import 'package:africasa_mecano/notification/liste_notification_page.dart';
 import 'package:africasa_mecano/password_page.dart';
 import 'package:africasa_mecano/profil_page.dart';
 import 'package:africasa_mecano/provider/info_user_provider.dart';
@@ -14,7 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-
+import 'package:badges/badges.dart' as badges;
 import 'core/components/dialog_alert.dart';
 import 'core/components/network_error_dialog.dart';
 import 'core/utils/check_network.dart';
@@ -118,7 +119,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-
         child: ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
@@ -229,9 +229,26 @@ class _HomePageState extends ConsumerState<HomePage> {
             );
           },
         ),
-        // actions: [
-        //    Icon(Icons.notifications),  // Icone de notification à droite
-        // ],
+        actions: [
+          badges.Badge(
+            position: badges.BadgePosition.topEnd(top: 2, end: 10),
+            badgeContent: Text(
+              "3",
+              style: TextStyle(color: Colors.white, fontSize: 10),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.notifications, color: Colors.grey.shade500,size: 25,),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        const ListNotificationPage()));
+              },
+            ),
+          ),
+          // Icone de notification à droite
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
