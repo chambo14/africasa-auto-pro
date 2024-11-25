@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:africasa_mecano/home_page.dart';
 import 'package:africasa_mecano/password_forgot_page.dart';
 import 'package:africasa_mecano/password_page.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:pushy_flutter/pushy_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/components/dialog_alert.dart';
@@ -15,6 +18,7 @@ import 'core/components/network_error_dialog.dart';
 import 'core/utils/check_network.dart';
 import 'core/utils/strings.dart';
 import 'domain/shared_preferences.dart';
+import 'main.dart';
 import 'menu_page.dart';
 
 
@@ -32,14 +36,81 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   String initialCountry = 'CI';
   FocusNode focusNode = FocusNode();
   bool _isObscured = true;
+  String _deviceToken = '';
+  String _instruction = '(please wait)';
 
   @override
   void initState() {
     Future.delayed(Duration.zero, (){
       _loginPhoneController = ref.read(loginControllerProvider);
+      initPlatformState();
     });
 
     super.initState();
+  }
+  Future<void> initPlatformState() async {
+    // Start the Pushy service
+    Pushy.listen();
+
+    // Set Pushy app ID (required for Web Push)
+    Pushy.setAppId('673914c47a327a8229eef7d1');
+
+    // Set custom notification icon (Android)
+    Pushy.setNotificationIcon('ic_launcher');
+
+    try {
+      // Register the device for push notifications
+      String deviceToken = await Pushy.register();
+      // String deviceToken ='';
+      // Print token to console/logcat
+      print('Device token: $deviceToken');
+
+      setState(() {
+        _deviceToken = deviceToken;
+        print('Device token: $_deviceToken');
+        //getDeviceToken(deviceToken);
+      });
+    } catch (error) {
+      // Print to console/logcat
+      print('Error: ${error.toString()}');
+
+      // Show error
+      setState(() {});
+    }
+
+    // Enable in-app notification banners (iOS 10+)
+    Pushy.toggleInAppBanner(false);
+
+    // Listen for push notifications received
+    Pushy.setNotificationListener(backgroundNotificationListener);
+
+    // Listen for push notification clicked
+    Pushy.setNotificationClickListener((Map<String, dynamic> data) {
+      // Print notification payload data
+      print('Notification clicked: $data');
+
+      // Extract notification messsage
+      String message = data['message'] ?? '';
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text('Notification clicked'),
+              content: Text(message),
+              actions: [
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop('dialog');
+                  },
+                )
+              ]);
+        },
+      );
+
+      // Clear iOS app badge number
+      Pushy.clearBadge();
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -58,6 +129,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               contactField(),
               const SizedBox(height: 20,),
               passwordField(),
+              const SizedBox(height: 10,),
+              Text(_deviceToken),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -166,7 +239,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return await rootBundle.loadString('assets/countries/country_list_en.json');
   }
 
-  void loginSubmit( String login, String password) async {
+  void loginSubmit( String login, String password, device) async {
     var checkInternet = checkNetwork();
 
     if (await checkInternet) {
@@ -177,7 +250,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             return const DialogAlert();
           });
       var dataResponse =
-      await _loginPhoneController.login(login: login, password: password);
+      await _loginPhoneController.login(login: login, password: password, device_token: device);
 
       if (dataResponse == null) {
         return;
@@ -219,7 +292,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (contactController.text.isNotEmpty || passwordController.text.isNotEmpty ) {
 
 
-      loginSubmit(contactController.text, passwordController.text);
+      loginSubmit(contactController.text, passwordController.text, _deviceToken);
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -233,5 +306,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           )));
       // Navigator.pop(context);
     }
+  }
+}
+
+bool isAndroid() {
+  try {
+    // Return whether the device is running on Android
+    return Platform.isAndroid;
+  } catch (e) {
+    // If it fails, we're on Web
+    return false;
   }
 }

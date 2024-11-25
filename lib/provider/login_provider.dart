@@ -11,8 +11,8 @@ class LoginPhoneController extends ChangeNotifier {
   final ApiRepository _apiRepository = ApiRepository();
 
   Future<ResponseModel?> login(
-      {required String login, required String password}) async {
-    final response = await _apiRepository.loginCustomer(login, password);
+      {required String login, required String password, required String device_token}) async {
+    final response = await _apiRepository.loginCustomer(login, password, device_token);
     notifyListeners();
     if (response == null) {
       return null;

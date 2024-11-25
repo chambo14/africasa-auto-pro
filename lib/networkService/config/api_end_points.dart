@@ -20,6 +20,8 @@ class ApiEndPoints {
   static const updatePicture = "/api/user/update-profil-pic";
   static const uploadCatalog = "/api/user/catalogue/store";
   static const listCatalogue = "/api/user/catalogues/";
+  static const notification = "/api/user/notifications";
+  static const notificationId = "/api/user/notification/show";
 
 
 

@@ -3,7 +3,20 @@ import 'package:africasa_mecano/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pushy_flutter/pushy_flutter.dart';
 
+@pragma('vm:entry-point')
+void backgroundNotificationListener(Map<String, dynamic> data) {
+  // Print notification payload data
+  print('Received notification: $data');
+
+  // Notification title
+  String notificationTitle = 'AFRICASA CLIENT';
+  String notificationText = data['message'] ?? '';
+  Pushy.notify(notificationTitle, notificationText, data);
+
+  Pushy.clearBadge();
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();

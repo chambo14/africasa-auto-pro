@@ -7,6 +7,7 @@ import 'package:africasa_mecano/profil_page.dart';
 import 'package:africasa_mecano/provider/info_user_provider.dart';
 import 'package:africasa_mecano/provider/list_operation_provider.dart';
 import 'package:africasa_mecano/provider/logout_provider.dart';
+import 'package:africasa_mecano/provider/notification_provider.dart';
 import 'package:africasa_mecano/provider/operation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,6 +51,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   late LogoutUserProvider _logoutUserProvider;
   late UserInfoProvider _userInfoProvider = UserInfoProvider();
   late ListOperationProvider _listOperationProvider = ListOperationProvider();
+  late NotificationProvider _notificationProvider = NotificationProvider();
   Future<void> loadSavedValues() async {
     final prefs = await SharedPreferences.getInstance();
     somGin = prefs.getDouble('somGin') ?? 0.0;
@@ -110,6 +112,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       _userInfoProvider.infoUserConnected();
       _listOperationProvider = ref.read(listOperationProvider);
       _listOperationProvider.getListOperation();
+      _notificationProvider = ref.read(notificationProvider);
+      _notificationProvider.getListNotification();
       loadSavedValues();
     });
     somGin = 0.0;
@@ -232,9 +236,18 @@ class _HomePageState extends ConsumerState<HomePage> {
         actions: [
           badges.Badge(
             position: badges.BadgePosition.topEnd(top: 2, end: 10),
-            badgeContent: Text(
-              "3",
-              style: TextStyle(color: Colors.white, fontSize: 10),
+            badgeContent: Consumer(
+              builder: (context, ref, child) {
+                var unRead;
+                _notificationProvider = ref.watch(notificationProvider);
+                var data = _notificationProvider.notificationModel?.data;
+                unRead = data?.where((item) => item.readAt == null).toList();
+
+                return Text(
+                  "${unRead?.length ?? 0}",
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                );
+              }
             ),
             child: IconButton(
               icon: Icon(Icons.notifications, color: Colors.grey.shade500,size: 25,),

@@ -155,9 +155,9 @@ class _BookingPageState extends ConsumerState<BookingPage> {
                          const SizedBox(width: 20,),
                          Text("Rendez-vous avec: ", style: GoogleFonts.poppins(fontSize: 13, ),),
                          const SizedBox(width: 2,),
-                         Text(item.client!.name.toString(), style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w800),),
+                         Text("${item.client?.name ?? "N/"}", style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w800),),
                          const SizedBox(width: 2,),
-                         Text(item.client!.lastname.toString(), style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w800),),
+                         Text("${item.client?.lastname ?? "D"}", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w800),),
 
                        ],
                      ),

@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/catalogue_modele.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
+import 'package:africasa_mecano/domain/models/detail_notification_model.dart';
 import 'package:africasa_mecano/domain/models/list_operation_model.dart';
 import 'package:africasa_mecano/domain/models/liste_catalogue_model.dart';
+import 'package:africasa_mecano/domain/models/notification_model.dart';
 import 'package:africasa_mecano/domain/models/operation_model.dart';
 import 'package:africasa_mecano/domain/models/password_model.dart';
 import 'package:africasa_mecano/domain/models/reset_model.dart';
@@ -129,7 +131,7 @@ class ApiRepository {
       return UserModel(message: ErrorResponse.checkMessage(e));
     }
   }
-  Future<ResponseModel?> loginCustomer(String login, String password) async {
+  Future<ResponseModel?> loginCustomer(String login, String password, String device_token) async {
     String url = Api.baseUrl + ApiEndPoints.login;
     if (kDebugMode) {
       print(url);
@@ -140,6 +142,7 @@ class ApiRepository {
         data: {
           "login": login,
           "password": password,
+          "device_token": device_token
         },
         options: Options(
           headers: {
@@ -433,7 +436,7 @@ class ApiRepository {
       } else {
         Map<String, dynamic> map = json.decode(response.data);
         if (kDebugMode) {
-          print(map["message"]);
+          print("${map["message"]}");
         }
         return RendezVousModel();
       }
@@ -483,7 +486,7 @@ class ApiRepository {
           url: url,
           options: Options(headers: {"Authorization": "Bearer $tokens"}));
       if (response.statusCode == 200) {
-        AppointModel appoint = AppointModel.fromJson(response.data as Map<String, dynamic>);
+        AppointModel appoint = AppointModel.fromJson(response.data);
         print('mecano a pour valeur $appoint');
         return appoint;
       } else {
@@ -494,7 +497,7 @@ class ApiRepository {
         return AppointModel();
       }
     } catch (e) {
-      print("la valeur de $e");
+      print("la valeur deX $e");
       return AppointModel();
     }
   }
@@ -955,5 +958,67 @@ class ApiRepository {
       print("la valeur de $e");
       return ListCatalogueModel();
     }
+  }
+
+  Future<NotificationModel?> listNotification() async {
+    String url = Api.baseUrl + ApiEndPoints.notification;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.get(
+          url: url,
+          options: Options(headers: {"Authorization": "Bearer $tokens"}));
+      if (response.statusCode == 200) {
+        NotificationModel notif = NotificationModel.fromJson(response.data);
+        print('mecano a pour valeur $notif');
+        return notif;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return NotificationModel();
+      }
+    } catch (e) {
+      print("la valeur de $e");
+      return NotificationModel();
+    }
+  }
+
+  Future<DetailNotificationModel?> detailNotification(int id) async {
+    String url = "${Api.baseUrl}${ApiEndPoints.notificationId}/$id";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+
+    try {
+      final response = await apiUtils.get(
+          url: url,
+          options: Options(headers: {"Authorization": "Bearer $tokens"}));
+      if (response.statusCode == 200) {
+        DetailNotificationModel responseData =
+        DetailNotificationModel.fromJson(response.data);
+        print("LA VALEUR DE RESPONSE est ${response.data}");
+        return responseData;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return DetailNotificationModel();
+      }
+    } catch (e) {
+      if (e is DioError) {
+        print(
+            "XXXXXXXXXXXXXXXXXXXXXXXXXXX${e.error}XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        return DetailNotificationModel();
+      }
+    }
+    return null;
   }
 }

@@ -49,9 +49,9 @@ class Datum {
   final String? hourEndRdv;
   final String? status;
   final String? isActive;
-  final dynamic deletedAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final Client? client;
 
   Datum({
@@ -114,7 +114,7 @@ class Datum {
     deletedAt: json["deleted_at"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
-    client: Client.fromJson(json["client"]),
+    client: json["client"] == null ? null : Client.fromJson(json["client"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -127,8 +127,8 @@ class Datum {
     "status": status,
     "is_active": isActive,
     "deleted_at": deletedAt,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
     "client": client?.toJson(),
   };
 }

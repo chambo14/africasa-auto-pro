@@ -1,0 +1,309 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.africasa.pro.test"
+4    android:versionCode="4"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="34" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:2:5-66
+15-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:2:22-64
+16    <uses-permission android:name="android.permission.CALL_PHONE" />
+16-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:3:5-69
+16-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:3:22-66
+17    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+17-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:4:5-79
+17-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:4:22-77
+18    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+18-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:5:5-81
+18-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:5:22-78
+19    <uses-permission android:name="android.permission.WAKE_LOCK" />
+19-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:6:5-68
+19-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:6:22-65
+20    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+20-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:7:5-77
+20-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:7:22-74
+21    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+21-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:8:5-79
+21-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:8:22-76
+22    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+22-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:9:5-81
+22-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:9:22-78
+23    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+23-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:10:5-79
+23-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:10:22-76
+24    <!--
+25 Required to query activities that can process text, see:
+26         https://developer.android.com/training/package-visibility and
+27         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+28
+29         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+30    -->
+31    <queries>
+31-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:83:5-101:15
+32        <intent>
+32-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:84:9-87:18
+33            <action android:name="android.intent.action.PROCESS_TEXT" />
+33-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:85:13-72
+33-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:85:21-70
+34
+35            <data android:mimeType="text/plain" />
+35-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:86:13-50
+35-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:86:19-48
+36        </intent>
+37        <intent>
+37-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:88:9-91:18
+38            <action android:name="android.intent.action.VIEW" />
+38-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:89:13-65
+38-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:89:21-62
+39
+40            <data android:scheme="sms" />
+40-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:86:13-50
+41        </intent>
+42        <!-- If your app checks for call support -->
+43        <intent>
+43-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:93:9-96:18
+44            <action android:name="android.intent.action.VIEW" />
+44-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:89:13-65
+44-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:89:21-62
+45
+46            <data android:scheme="tel" />
+46-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:86:13-50
+47        </intent>
+48        <!-- If your application checks for inAppBrowserView launch mode support -->
+49        <intent>
+49-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:98:9-100:18
+50            <action android:name="android.support.customtabs.action.CustomTabsService" />
+50-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:99:13-90
+50-->C:\Users\merak\africasa-auto-pro\android\app\src\main\AndroidManifest.xml:99:21-87
+51        </intent>
+52    </queries>
+53
+54    <permission
+54-->[androidx.core:core:1.13.1] C:\Users\merak\.gradle\caches\transforms-3\1529150a9457c901ac75cd5ffed48b2b\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+55        android:name="com.africasa.pro.test.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+55-->[androidx.core:core:1.13.1] C:\Users\merak\.gradle\caches\transforms-3\1529150a9457c901ac75cd5ffed48b2b\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+56        android:protectionLevel="signature" />
+56-->[androidx.core:core:1.13.1] C:\Users\merak\.gradle\caches\transforms-3\1529150a9457c901ac75cd5ffed48b2b\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+57
+58    <uses-permission android:name="com.africasa.pro.test.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+58-->[androidx.core:core:1.13.1] C:\Users\merak\.gradle\caches\transforms-3\1529150a9457c901ac75cd5ffed48b2b\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+58-->[androidx.core:core:1.13.1] C:\Users\merak\.gradle\caches\transforms-3\1529150a9457c901ac75cd5ffed48b2b\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+59
+60    <application
+61        android:name="android.app.Application"
+62        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+62-->[androidx.core:core:1.13.1] C:\Users\merak\.gradle\caches\transforms-3\1529150a9457c901ac75cd5ffed48b2b\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+63        android:debuggable="true"
+64        android:extractNativeLibs="true"
+65        android:icon="@mipmap/ic_launcher"
+66        android:label="Africasa Auto Pro" >
+67        <activity
+68            android:name="com.africasa.pro.test.MainActivity"
+69            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+70            android:exported="true"
+71            android:hardwareAccelerated="true"
+72            android:launchMode="singleTop"
+73            android:taskAffinity=""
+74            android:theme="@style/LaunchTheme"
+75            android:usesCleartextTraffic="true"
+76            android:windowSoftInputMode="adjustResize" >
+77
+78            <!--
+79                 Specifies an Android theme to apply to this Activity as soon as
+80                 the Android process has started. This theme is visible to the user
+81                 while the Flutter UI initializes. After that, this theme continues
+82                 to determine the Window background behind the Flutter UI.
+83            -->
+84            <meta-data
+85                android:name="io.flutter.embedding.android.NormalTheme"
+86                android:resource="@style/NormalTheme" />
+87
+88            <intent-filter>
+89                <action android:name="android.intent.action.MAIN" />
+90
+91                <category android:name="android.intent.category.LAUNCHER" />
+92            </intent-filter>
+93        </activity>
+94        <!--
+95             Don't delete the meta-data below.
+96             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+97        -->
+98        <meta-data
+99            android:name="flutterEmbedding"
+100            android:value="2" />
+101
+102        <receiver
+103            android:name="me.pushy.sdk.flutter.internal.PushyInternalReceiver"
+104            android:exported="false" >
+105            <intent-filter>
+106
+107                <!-- Do not modify this -->
+108                <action android:name="pushy.me" />
+109            </intent-filter>
+110        </receiver>
+111
+112        <!-- Pushy Update Receiver -->
+113        <!-- Do not modify - internal BroadcastReceiver that restarts the listener service -->
+114        <receiver
+115            android:name="me.pushy.sdk.receivers.PushyUpdateReceiver"
+116            android:exported="false" >
+117            <intent-filter>
+118                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+119            </intent-filter>
+120        </receiver>
+121
+122        <!-- Pushy Boot Receiver -->
+123        <!-- Do not modify - internal BroadcastReceiver that restarts the listener service -->
+124        <receiver
+125            android:name="me.pushy.sdk.receivers.PushyBootReceiver"
+126            android:exported="false" >
+127            <intent-filter>
+128                <action android:name="android.intent.action.BOOT_COMPLETED" />
+129            </intent-filter>
+130        </receiver>
+131
+132        <!-- Pushy Socket Service -->
+133        <!-- Do not modify - internal service -->
+134        <service
+135            android:name="me.pushy.sdk.services.PushySocketService"
+136            android:stopWithTask="false" />
+137
+138        <!-- Pushy Job Service (added in Pushy SDK 1.0.35) -->
+139        <!-- Do not modify - internal service -->
+140        <service
+141            android:name="me.pushy.sdk.services.PushyJobService"
+142            android:permission="android.permission.BIND_JOB_SERVICE"
+143            android:stopWithTask="false" />
+144
+145        <provider
+145-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:9-17:20
+146            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+146-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-82
+147            android:authorities="com.africasa.pro.test.flutter.image_provider"
+147-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-74
+148            android:exported="false"
+148-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:12:13-37
+149            android:grantUriPermissions="true" >
+149-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:13:13-47
+150            <meta-data
+150-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:14:13-16:75
+151                android:name="android.support.FILE_PROVIDER_PATHS"
+151-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:15:17-67
+152                android:resource="@xml/flutter_image_picker_file_paths" />
+152-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:16:17-72
+153        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+154        <service
+154-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:19:9-31:19
+155            android:name="com.google.android.gms.metadata.ModuleDependencies"
+155-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:20:13-78
+156            android:enabled="false"
+156-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:21:13-36
+157            android:exported="false" >
+157-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:22:13-37
+158            <intent-filter>
+158-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:24:13-26:29
+159                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+159-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:25:17-94
+159-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:25:25-91
+160            </intent-filter>
+161
+162            <meta-data
+162-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:28:13-30:36
+163                android:name="photopicker_activity:0:required"
+163-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:29:17-63
+164                android:value="" />
+164-->[:image_picker_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+17\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:30:17-33
+165        </service>
+166
+167        <activity
+167-->[:url_launcher_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.14\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-11:74
+168            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+168-->[:url_launcher_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.14\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-74
+169            android:exported="false"
+169-->[:url_launcher_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.14\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-37
+170            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+170-->[:url_launcher_android] C:\Users\merak\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.14\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-71
+171
+172        <uses-library
+172-->[androidx.window:window:1.2.0] C:\Users\merak\.gradle\caches\transforms-3\1f177e89720af89252d920a0ad806f3f\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+173            android:name="androidx.window.extensions"
+173-->[androidx.window:window:1.2.0] C:\Users\merak\.gradle\caches\transforms-3\1f177e89720af89252d920a0ad806f3f\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+174            android:required="false" />
+174-->[androidx.window:window:1.2.0] C:\Users\merak\.gradle\caches\transforms-3\1f177e89720af89252d920a0ad806f3f\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+175        <uses-library
+175-->[androidx.window:window:1.2.0] C:\Users\merak\.gradle\caches\transforms-3\1f177e89720af89252d920a0ad806f3f\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+176            android:name="androidx.window.sidecar"
+176-->[androidx.window:window:1.2.0] C:\Users\merak\.gradle\caches\transforms-3\1f177e89720af89252d920a0ad806f3f\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+177            android:required="false" />
+177-->[androidx.window:window:1.2.0] C:\Users\merak\.gradle\caches\transforms-3\1f177e89720af89252d920a0ad806f3f\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+178
+179        <provider
+179-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+180            android:name="androidx.startup.InitializationProvider"
+180-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+181            android:authorities="com.africasa.pro.test.androidx-startup"
+181-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+182            android:exported="false" >
+182-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+183            <meta-data
+183-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+184                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+184-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+185                android:value="androidx.startup" />
+185-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\merak\.gradle\caches\transforms-3\38fb94e9de75940789b934e02e896893\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+186            <meta-data
+186-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+187                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+187-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+188                android:value="androidx.startup" />
+188-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+189        </provider>
+190
+191        <receiver
+191-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+192            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+192-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+193            android:directBootAware="false"
+193-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+194            android:enabled="true"
+194-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+195            android:exported="true"
+195-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+196            android:permission="android.permission.DUMP" >
+196-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+197            <intent-filter>
+197-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+198                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+198-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+198-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+199            </intent-filter>
+200            <intent-filter>
+200-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+201                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+201-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+201-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+202            </intent-filter>
+203            <intent-filter>
+203-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+204                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+204-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+204-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+205            </intent-filter>
+206            <intent-filter>
+206-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+207                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+207-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+207-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\merak\.gradle\caches\transforms-3\d12f480b1a5e7915819f08ce27d0e41d\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+208            </intent-filter>
+209        </receiver>
+210    </application>
+211
+212</manifest>
