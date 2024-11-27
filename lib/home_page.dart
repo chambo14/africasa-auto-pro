@@ -370,23 +370,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                               width: 50,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue.shade700,
+                                color: Colors.green.shade700,
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.add,
                                 color: Colors.white,
                               ),
                             ),
                           ),
                           const SizedBox(height: 5,),
-
-                          // Text(totalPrix.toStringAsFixed(0)
-                          //   ,  // Affiche avec deux décimales
-                          //   style: GoogleFonts.poppins(
-                          //     color: Colors.grey.shade500,
-                          //     fontSize: 20,
-                          //   ),
-                          // ),
                           Text(
                             NumberFormat.currency(
                               locale: 'fr', // Changez la langue si nécessaire
@@ -410,23 +402,20 @@ class _HomePageState extends ConsumerState<HomePage> {
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blue.shade500),
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
+                                color: Colors.red.shade500,
                               ),
                               child: Center(
                                 child: Text(
                                   "-",
                                   style: GoogleFonts.poppins(
-                                       fontSize: 25, color: Colors.blue.shade500, fontWeight: FontWeight.bold),
+                                       fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 5,),
-                          // Text(totalPrixSortie.toStringAsFixed(0),
-                          //     style: GoogleFonts.poppins(
-                          //         color: Colors.grey.shade500, fontSize: 20)),
+
 
                           Text(
                             NumberFormat.currency(

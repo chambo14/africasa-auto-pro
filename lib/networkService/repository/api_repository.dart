@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/catalogue_modele.dart';
+import 'package:africasa_mecano/domain/models/delete_catalogue_model.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
 import 'package:africasa_mecano/domain/models/detail_notification_model.dart';
 import 'package:africasa_mecano/domain/models/list_operation_model.dart';
@@ -1020,5 +1021,37 @@ class ApiRepository {
       }
     }
     return null;
+  }
+  Future<DeleteCatalogueModel?> deletedCatalogue(int id) async {
+    String url = "${Api.baseUrl}${ApiEndPoints.deleteCatalogue}/$id/delete";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.delete(
+          api: url,
+          options: Options(headers: {"Authorization": "Bearer $tokens"}));
+      if (response.statusCode == 200) {
+        DeleteCatalogueModel responseData = DeleteCatalogueModel.fromJson(response.data);
+        print("LA VALEUR DE RESPONSE est ${response.data}");
+        return responseData;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return DeleteCatalogueModel();
+      }
+    } catch (e) {
+      if (e is DioError) {
+        print(
+            "XXXXXXXXXXXXXXXXXXXXXXXXXXX${e.error}XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        return DeleteCatalogueModel();
+      }
+    }
+    return null;
+
   }
 }

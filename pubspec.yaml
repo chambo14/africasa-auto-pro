@@ -70,10 +70,10 @@ dev_dependencies:
 flutter_launcher_icons:
     android: true
     ios: true
-    image_path: "assets/icon/play.png"  # Pour l'icône principale
+    image_path: "assets/icon/proLogo.png"  # Pour l'icône principale
     min_sdk_android: 21
-    adaptive_icon_background: "assets/icon/play.png"  # Sépare les fichiers background/foreground si possible
-    adaptive_icon_foreground: "assets/icon/play.png"
+    adaptive_icon_background: "assets/icon/proLogo.png"  # Sépare les fichiers background/foreground si possible
+    adaptive_icon_foreground: "assets/icon/proLogo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

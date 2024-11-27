@@ -1,11 +1,16 @@
 import 'package:africasa_mecano/catalogue_page.dart';
 import 'package:africasa_mecano/domain/models/liste_catalogue_model.dart';
 import 'package:africasa_mecano/profil_page.dart';
+import 'package:africasa_mecano/provider/delete_catalogue_provider.dart';
 import 'package:africasa_mecano/provider/list_catalogue_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
+
+import 'core/components/dialog_alert.dart';
+import 'core/components/network_error_dialog.dart';
+import 'core/utils/check_network.dart';
 
 class ListCataloguePage extends ConsumerStatefulWidget {
   const ListCataloguePage({super.key, this.id});
@@ -17,13 +22,14 @@ class ListCataloguePage extends ConsumerStatefulWidget {
 
 class _ListCataloguePageState extends ConsumerState<ListCataloguePage> {
   late LisCatalogueProvider _lisCatalogueProvider = LisCatalogueProvider();
-
+ late DeleteCatalogueProvider _deleteCatalogueProvider = DeleteCatalogueProvider();
   @override
   void initState() {
 
     Future.delayed(Duration.zero, () {
       _lisCatalogueProvider = ref.read(listCatalogue);
       _lisCatalogueProvider.listCatalogue(id: widget.id!.toInt());
+      _deleteCatalogueProvider = ref.read(deleteCatalogueProvider);
     });
 
 
@@ -134,6 +140,38 @@ class _ListCataloguePageState extends ConsumerState<ListCataloguePage> {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
+                  showDialog<void>(
+                    context: context,
+                    barrierDismissible: false, // user must tap button!
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title:  Text('Suppression', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.blue.shade500),),
+                        content:  SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              Text('Voulez-vous supprimer cette image de votre catalogue?', style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.grey.shade800)),
+
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Non'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('Supprimer'),
+                            onPressed: () {
+                              deleteCatalogue(item.id);
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  );
 
                 },
                 child: ClipRRect(
@@ -153,5 +191,74 @@ class _ListCataloguePageState extends ConsumerState<ListCataloguePage> {
         ),
       );
     });
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Voulez-vous supprimer cette image de votre catalogue?'),
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Non'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Supprimer'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+  void deleteCatalogue(int id) async {
+    var checkInternet = checkNetwork();
+
+    if (await checkInternet) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return const DialogAlert();
+          });
+      var dataResponse =
+      await _deleteCatalogueProvider.delete(id: id);
+
+      if (dataResponse == null) {
+        return;
+      }
+      if (dataResponse.success == true) {
+        _lisCatalogueProvider.listCatalogue(id: widget.id!.toInt());
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 5),
+            content: Text(dataResponse.message.toString(),
+                style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white))));
+        //codePin.clear();
+        Navigator.of(context).pop();
+      }
+    } else {
+      showDialog(
+          context: context, builder: (context) => const NetworkErrorDialog());
+    }
   }
 }
