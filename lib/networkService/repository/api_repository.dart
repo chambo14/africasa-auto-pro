@@ -953,7 +953,7 @@ class ApiRepository {
         if (kDebugMode) {
           print(map["message"]);
         }
-        return ListCatalogueModel();
+        return ListCatalogueModel(message: response.data["message"]);
       }
     } catch (e) {
       print("la valeur de $e");
