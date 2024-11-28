@@ -130,7 +130,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               const SizedBox(height: 20,),
               passwordField(),
               const SizedBox(height: 10,),
-              Text(_deviceToken),
+              Text(""),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

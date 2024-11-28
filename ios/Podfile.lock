@@ -1,13 +1,23 @@
 PODS:
+  - CocoaMQTT (2.1.0):
+    - CocoaMQTT/Core (= 2.1.0)
+  - CocoaMQTT/Core (2.1.0):
+    - MqttCocoaAsyncSocket (~> 1.0.8)
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
   - Flutter (1.0.0)
   - image_picker_ios (0.0.1):
     - Flutter
+  - MqttCocoaAsyncSocket (1.0.8)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - Pushy (1.0.48):
+    - CocoaMQTT (= 2.1.0)
+  - pushy_flutter (2.0.18):
+    - Flutter
+    - Pushy (= 1.0.48)
   - ReachabilitySwift (5.2.3)
   - shared_preferences_foundation (0.0.1):
     - Flutter
@@ -20,11 +30,15 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - pushy_flutter (from `.symlinks/plugins/pushy_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
+    - CocoaMQTT
+    - MqttCocoaAsyncSocket
+    - Pushy
     - ReachabilitySwift
 
 EXTERNAL SOURCES:
@@ -36,16 +50,22 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  pushy_flutter:
+    :path: ".symlinks/plugins/pushy_flutter/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
+  CocoaMQTT: 43666585403f664bb55361189c03c54897060324
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  MqttCocoaAsyncSocket: 77d3b74f76228dd5a05d1f9526eab101d415b30c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  Pushy: c07f638ea2e40cac2198b01d41737579116379c2
+  pushy_flutter: cdbad44e459fd72b080d50b513099541486d0053
   ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
