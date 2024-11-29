@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/catalogue_modele.dart';
+import 'package:africasa_mecano/domain/models/day_model.dart';
 import 'package:africasa_mecano/domain/models/delete_catalogue_model.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
 import 'package:africasa_mecano/domain/models/detail_notification_model.dart';
@@ -13,6 +14,7 @@ import 'package:africasa_mecano/domain/models/notification_model.dart';
 import 'package:africasa_mecano/domain/models/operation_model.dart';
 import 'package:africasa_mecano/domain/models/password_model.dart';
 import 'package:africasa_mecano/domain/models/reset_model.dart';
+import 'package:africasa_mecano/domain/models/update_day_model.dart';
 import 'package:africasa_mecano/domain/models/update_picture_model.dart';
 
 import 'package:dio/dio.dart';
@@ -132,7 +134,8 @@ class ApiRepository {
       return UserModel(message: ErrorResponse.checkMessage(e));
     }
   }
-  Future<ResponseModel?> loginCustomer(String login, String password, String device_token) async {
+  Future<ResponseModel?> loginCustomer(
+      String login, String password, String device_token) async {
     String url = Api.baseUrl + ApiEndPoints.login;
     if (kDebugMode) {
       print(url);
@@ -147,9 +150,8 @@ class ApiRepository {
         },
         options: Options(
           headers: {
-
             'content-type': 'application/json',
-            'accept':'application/json'
+            'accept': 'application/json'
           },
           followRedirects: false, // Désactiver la redirection automatique
           validateStatus: (status) {
@@ -158,20 +160,36 @@ class ApiRepository {
         ),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 400) {
+      if (response.statusCode == 200) {
         if (kDebugMode) {
           print(ResponseModel.fromJson(response.data));
         }
-        ResponseModel phoneconnected = ResponseModel.fromJson(response.data);
-        return phoneconnected;
-      } else {
-        Map<String, dynamic> map = json.decode(response.data);
-        if (kDebugMode) {
-          print(map["message"]);
+        return ResponseModel.fromJson(response.data);
+      } else if (response.statusCode == 400 || response.statusCode == 404) {
+        Map<String, dynamic> errorData = response.data;
+        String errorMessage = errorData["message"] ?? "Une erreur inconnue est survenue.";
+        if (errorData["data"] != null && errorData["data"] is Map<String, dynamic>) {
+          final detailedErrors = errorData["data"];
+          if (detailedErrors["password"] != null) {
+            errorMessage += "\n" + (detailedErrors["password"] as List).join(", ");
+          }
+          if (detailedErrors["error"] != null) {
+            errorMessage += "\n" + detailedErrors["error"];
+          }
         }
-        return ResponseModel();
+
+        if (kDebugMode) {
+          print("Erreur (status: ${response.statusCode}): $errorMessage");
+        }
+        return ResponseModel(success: false, message: errorMessage);
+      } else {
+        return ResponseModel(
+            success: false, message: "Une erreur inattendue est survenue.");
       }
     } catch (e) {
+      if (kDebugMode) {
+        print("Exception: $e");
+      }
       return ResponseModel(message: ErrorResponse.checkMessage(e));
     }
   }
@@ -308,8 +326,6 @@ class ApiRepository {
       return ResetModel(message: ErrorResponse.checkMessage(e));
     }
   }
-
-
 
   Future<LogoutModel?> logoutCustomer() async {
       String url = Api.baseUrl + ApiEndPoints.logout;
@@ -1023,7 +1039,7 @@ class ApiRepository {
     return null;
   }
   Future<DeleteCatalogueModel?> deletedCatalogue(int id) async {
-    String url = "${Api.baseUrl}${ApiEndPoints.deleteCatalogue}/$id/delete";
+    String url = "${Api.baseUrl}${ApiEndPoints.deleteCatalogue}$id/delete";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var tokens = prefs.getString("tokens");
     if (kDebugMode) {
@@ -1053,5 +1069,102 @@ class ApiRepository {
     }
     return null;
 
+  }
+
+  Future<DayModel?> working(int mecanicienId, String libelle, String horaire) async {
+    String url = Api.baseUrl + ApiEndPoints.workingDay;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.post(
+        url: url,
+        data: {
+          "mecanicien_id": mecanicienId,
+          "libelle": libelle,
+          "horaire": horaire,
+
+        },
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $tokens",
+            'content-type': 'application/json',
+            'accept':'application/json'
+          },
+          followRedirects: false, // Désactiver la redirection automatique
+          validateStatus: (status) {
+            return status! < 500; // Accepter toutes les réponses inférieures à 500
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 400) {
+        if (kDebugMode) {
+          print(DayModel.fromJson(response.data));
+        }
+        DayModel working = DayModel.fromJson(response.data);
+        return working;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return DayModel();
+      }
+    } catch (e) {
+      print("capture $e");
+      return DayModel(message: ErrorResponse.checkMessage(e));
+    }
+  }
+
+  Future<UpdateDayModel?> updateWorking(int mecanicienId, String libelle, String horaire, int id) async {
+    // String url = Api.baseUrl + ApiEndPoints.updateWorkingDay;
+    String url = "${Api.baseUrl + ApiEndPoints.updateWorkingDay}$mecanicienId";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.post(
+        url: url,
+        data: {
+          "mecanicien_id": mecanicienId,
+          "libelle": libelle,
+          "horaire": horaire,
+
+        },
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $tokens",
+            'content-type': 'application/json',
+            'accept':'application/json'
+          },
+          followRedirects: false, // Désactiver la redirection automatique
+          validateStatus: (status) {
+            return status! < 500; // Accepter toutes les réponses inférieures à 500
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 400) {
+        if (kDebugMode) {
+          print(UpdateDayModel.fromJson(response.data));
+        }
+        UpdateDayModel working = UpdateDayModel.fromJson(response.data);
+        return working;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return UpdateDayModel();
+      }
+    } catch (e) {
+      print("capture $e");
+      return UpdateDayModel(message: ErrorResponse.checkMessage(e));
+    }
   }
 }
