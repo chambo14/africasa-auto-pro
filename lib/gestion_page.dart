@@ -60,7 +60,6 @@ class _GestionPageState extends ConsumerState<GestionPage> {
 
       _listOperationProvider.listOperationModel!.data?.allOperations.sort((a, b) => b.createdAt.compareTo(a.createdAt),);
       if (_listOperationProvider.listOperationModel == null) {
-        // Retourne un loader pendant le chargement
         return Padding(
           padding: const EdgeInsets.all(170.0),
           child: NutsActivityIndicator(
@@ -75,7 +74,6 @@ class _GestionPageState extends ConsumerState<GestionPage> {
       }
 
       var data = _listOperationProvider.listOperationModel?.data;
-      //print('la valeur de ce $data');
       if (_listOperationProvider.isLoading || data == null) {
         return Padding(
           padding: const EdgeInsets.all(170.0),

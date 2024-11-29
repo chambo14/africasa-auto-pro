@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:africasa_mecano/profil_page.dart';
 import 'package:africasa_mecano/provider/update_profil_provider.dart';
+import 'package:africasa_mecano/provider/update_working_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,8 @@ import 'domain/models/update_profile_model.dart';
 import 'provider/update_picture_provider.dart';
 
 class UpdateProfilePage extends ConsumerStatefulWidget {
-  const UpdateProfilePage({super.key});
+  const UpdateProfilePage({super.key, this.id});
+  final int? id;
 
   @override
   ConsumerState<UpdateProfilePage> createState() => _UpdateProfilePageState();
@@ -27,13 +29,17 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   TextEditingController lastname = TextEditingController();
   TextEditingController speciality = TextEditingController();
   TextEditingController adresse = TextEditingController();
+  TextEditingController libelle = TextEditingController();
+  TextEditingController horaire = TextEditingController();
   late UpdateProfilProvider _uploadProfileProvider = UpdateProfilProvider();
   late UpdatePictureProvider _updatePictureProvider = UpdatePictureProvider();
+  late UpdateWorkingProvider _updateWorkingProvider = UpdateWorkingProvider();
 
   @override
   void initState() {
     _uploadProfileProvider = ref.read(updateProfileProvider);
     _updatePictureProvider = ref.read(pictureProvider);
+    _updateWorkingProvider = ref.read(updateWorkingProvider);
     super.initState();
   }
   File? _imageFile; // Pour stocker l'image sélectionnée
@@ -106,13 +112,17 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             ),
             const SizedBox(height: 30,),
             nameField(),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 15,),
             lastnameField(),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 15,),
             villeField(),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 15,),
             adresseField(),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 15,),
+            libelleField(),
+            const SizedBox(height: 15,),
+            horaireField(),
+            const SizedBox(height: 25,),
             changeButton()
           ],
         ),
@@ -261,6 +271,70 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     );
   }
 
+  Widget libelleField() {
+    return TextFormField(
+      controller: libelle,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Svp entrez votre jour';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: "Saisissez votre jour",
+        fillColor: Colors.white,
+        filled: true,
+        hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
+
+        prefixIcon: Icon(Icons.calendar_month,color: Colors.grey.shade200,),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+  Widget horaireField(){
+    return TextFormField(
+      controller: horaire,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Svp entrez vos heures de travail';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: "00h-20h",
+        fillColor: Colors.white,
+        filled: true,
+        hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
+
+        prefixIcon: Icon(Icons.calendar_month,color: Colors.grey.shade200,),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
   void updateProfileSubmit( String name, String lastname, String speciality, String adresse) async {
     var checkInternet = checkNetwork();
 
@@ -305,9 +379,10 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     }
   }
   changeProfile(){
-    if (name.text.isNotEmpty || lastname.text.isNotEmpty || speciality.text.isNotEmpty|| adresse.text.isNotEmpty) {
+    if (name.text.isNotEmpty || lastname.text.isNotEmpty || speciality.text.isNotEmpty|| adresse.text.isNotEmpty || libelle.text.isNotEmpty || horaire.text.isNotEmpty) {
 
       updateProfileSubmit(name.text, lastname.text , speciality.text, adresse.text,);
+      daySubmit(widget.id!.toInt(), libelle.text, horaire.text);
 
       if (_imageFile != null) {
         uploadSubmit(_imageFile!); // Call image upload function if an image is selected
@@ -326,6 +401,48 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     }
   }
 
+  void daySubmit( int mecanicienId, String libelle, horaire) async {
+    var checkInternet = checkNetwork();
+
+    if (await checkInternet) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return const DialogAlert();
+          });
+      var dataResponse =
+      await _updateWorkingProvider.working(mecanicienId: mecanicienId, libelle: libelle, horaire: horaire);
+
+      if (dataResponse == null) {
+        return;
+      }
+      if (dataResponse.success == true) {
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfilPage()),
+              (route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 5),
+            content: Text(dataResponse.message.toString(),
+                style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white))));
+        //codePin.clear();
+        Navigator.of(context).pop();
+      }
+    }
+
+
+    else {
+      showDialog(
+          context: context, builder: (context) => const NetworkErrorDialog());
+    }
+  }
   // void changeProfile() {
   //   if (name.text.isNotEmpty || lastname.text.isNotEmpty || ville.text.isNotEmpty || adresse.text.isNotEmpty || cni.text.isNotEmpty || _imageFile != null) {
   //     // Proceed with profile update submission

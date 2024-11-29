@@ -1,3 +1,4 @@
+import 'package:africasa_mecano/Day_page.dart';
 import 'package:africasa_mecano/Update_profile_page.dart';
 import 'package:africasa_mecano/catalogue_page.dart';
 import 'package:africasa_mecano/home_page.dart';
@@ -97,7 +98,20 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
                     ],
                   ),
                   const SizedBox(height: 20,),
-                  button(),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UpdateProfilePage(id: infoClient.mecanicien!.id.toInt() ,)));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 320,
+                      decoration: BoxDecoration(
+                          color: Colors.blue.shade500,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Center(child: Text("Modifier mon profil", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
+                    ),
+                  ),
                   const SizedBox(height: 10,),
                   InkWell(
                     onTap: (){
@@ -113,6 +127,22 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
                       ),
                       child: Center(child: Text("Catalogue", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.blue.shade500),)),
                     ),
+                  ),
+                  const SizedBox(height: 10,),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> DayPage(id:infoClient.mecanicien!.id.toInt() )));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 320,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.blue.shade500,)
+                      ),
+                      child: Center(child: Text("Jour de travail", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.blue.shade500),)),
+                    ),
                   )
 
                 ],
@@ -124,22 +154,22 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
     );
   }
 
-  Widget button(){
-    return InkWell(
-      onTap: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const UpdateProfilePage()));
-      },
-      child: Container(
-        height: 50,
-        width: 320,
-        decoration: BoxDecoration(
-            color: Colors.blue.shade500,
-            borderRadius: BorderRadius.circular(10)
-        ),
-        child: Center(child: Text("Modifier mon profil", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
-      ),
-    );
-  }
+  // Widget button(){
+  //   return InkWell(
+  //     onTap: (){
+  //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UpdateProfilePage(id: infoClient.mecanicien!.id.toInt() ,)));
+  //     },
+  //     child: Container(
+  //       height: 50,
+  //       width: 320,
+  //       decoration: BoxDecoration(
+  //           color: Colors.blue.shade500,
+  //           borderRadius: BorderRadius.circular(10)
+  //       ),
+  //       child: Center(child: Text("Modifier mon profil", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
+  //     ),
+  //   );
+  // }
 
 
 }

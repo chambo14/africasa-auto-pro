@@ -11,7 +11,7 @@ void backgroundNotificationListener(Map<String, dynamic> data) {
   print('Received notification: $data');
 
   // Notification title
-  String notificationTitle = 'AFRICASA CLIENT';
+  String notificationTitle = 'AFRICASA';
   String notificationText = data['message'] ?? '';
   Pushy.notify(notificationTitle, notificationText, data);
 
