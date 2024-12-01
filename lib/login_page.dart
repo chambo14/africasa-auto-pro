@@ -121,11 +121,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-             Image.asset("assets/logo.png"),
+             Image.asset("assets/africasaPro.png", height: 170,),
               Text("Connecte-toi avec ton numero de telephone", style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 70,),
+              const SizedBox(height: 40,),
               contactField(),
               const SizedBox(height: 20,),
               passwordField(),
