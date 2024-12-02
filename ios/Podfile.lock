@@ -18,7 +18,7 @@ PODS:
   - pushy_flutter (2.0.18):
     - Flutter
     - Pushy (= 1.0.48)
-  - ReachabilitySwift (5.2.3)
+  - ReachabilitySwift (5.2.4)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -66,10 +66,10 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   Pushy: c07f638ea2e40cac2198b01d41737579116379c2
   pushy_flutter: cdbad44e459fd72b080d50b513099541486d0053
-  ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
+  ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
