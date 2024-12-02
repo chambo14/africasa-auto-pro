@@ -47,10 +47,11 @@ class _SplashPageState extends State<SplashPage> {
     var token = prefs.getString("tokens");
     data = await SharedPreferencesServices.getUser();
 
-    if(data!=null && token!.isNotEmpty){
+    if(token != null && token.isNotEmpty && data != null){
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     }else {
+      await prefs.remove("tokens");
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }

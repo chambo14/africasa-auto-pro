@@ -25,7 +25,8 @@ import 'core/utils/strings.dart';
 import 'login_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.isActive});
+  final int? isActive;
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
@@ -115,6 +116,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       _notificationProvider = ref.read(notificationProvider);
       _notificationProvider.getListNotification();
       loadSavedValues();
+
+      deconnexionPrestataire();
     });
     somGin = 0.0;
     super.initState();
@@ -266,222 +269,228 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-          child: Consumer(
-            builder: (context, ref, child) {
-              _listOperationProvider = ref.watch(listOperationProvider);
-              List<AllOperation> entreeTab = [];
-              List<AllOperation> sortieTab = [];
-              var data = _listOperationProvider.listOperationModel?.data?.allOperations;
+          child: RefreshIndicator(
+            onRefresh: () {
+              return Future<void>.delayed(const Duration(seconds: 3));
 
-              if(data != null && data.isNotEmpty){
-                entreeTab = data.where((item) => item.typeOperation == "ENTREE").toList();
-                sortieTab = data.where((item) => item.typeOperation == "SORTIE").toList();
+            },
+            child: Consumer(
+              builder: (context, ref, child) {
+                _listOperationProvider = ref.watch(listOperationProvider);
+                List<AllOperation> entreeTab = [];
+                List<AllOperation> sortieTab = [];
+                var data = _listOperationProvider.listOperationModel?.data?.allOperations;
 
-              }
-              double totalPrix = entreeTab.fold(0.0, (total, item) => total + item.amount);
-              double totalPrixSortie = sortieTab.fold(0.0, (total, item) => total + item.amount);
-              double differencePrix = totalPrix - totalPrixSortie;
-              print(entreeTab);
-              return Column(
-                children: [
-                  Center(
-                    child: SfRadialGauge(
-                      axes: <RadialAxis>[
-                        RadialAxis(
-                          minimum: 0,
-                          maximum: 1000000,
-                          showLabels: false,  // Masque les étiquettes de valeur
-                          showTicks: false,   // Masque les graduations
-                          ranges: <GaugeRange>[
-                            GaugeRange(
-                              startValue: 0,
-                              endValue: 250000,
-                              color: Colors.red,
-                            ),
-                            GaugeRange(
-                              startValue: 250000,
-                              endValue: 500000,
-                              color: Colors.orange,
-                            ),
-                            GaugeRange(
-                              startValue: 500000,
-                              endValue: 750000,
-                              color: Colors.yellow,
-                            ),
-                            GaugeRange(
-                              startValue: 750000,
-                              endValue: 1000000,
-                              color: Colors.green,
-                            ),
-                          ],
-                          pointers: <GaugePointer>[
-                            NeedlePointer(
-                              value: differencePrix, // Utilisez la variable balance ici
-                              needleStartWidth: 1,
-                              needleEndWidth: 3,
-                              knobStyle: KnobStyle(
-                                knobRadius: 0.05,
-                                color: Colors.black,
+                if(data != null && data.isNotEmpty){
+                  entreeTab = data.where((item) => item.typeOperation == "ENTREE").toList();
+                  sortieTab = data.where((item) => item.typeOperation == "SORTIE").toList();
+
+                }
+                double totalPrix = entreeTab.fold(0.0, (total, item) => total + item.amount);
+                double totalPrixSortie = sortieTab.fold(0.0, (total, item) => total + item.amount);
+                double differencePrix = totalPrix - totalPrixSortie;
+                print(entreeTab);
+                return Column(
+                  children: [
+                    Center(
+                      child: SfRadialGauge(
+                        axes: <RadialAxis>[
+                          RadialAxis(
+                            minimum: 0,
+                            maximum: 1000000,
+                            showLabels: false,  // Masque les étiquettes de valeur
+                            showTicks: false,   // Masque les graduations
+                            ranges: <GaugeRange>[
+                              GaugeRange(
+                                startValue: 0,
+                                endValue: 250000,
+                                color: Colors.red,
                               ),
-                            ),
-                          ],
-                          annotations: <GaugeAnnotation>[
-                            GaugeAnnotation(
-                              widget: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    NumberFormat.currency(
-                                      locale: 'fr', // Changez la langue si nécessaire
-                                      symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
-                                      decimalDigits: 0, // Nombre de chiffres après la virgule
-                                    ).format(differencePrix), // Formate le nombre avec séparateurs des milliers
-                                    style: GoogleFonts.poppins(
+                              GaugeRange(
+                                startValue: 250000,
+                                endValue: 500000,
+                                color: Colors.orange,
+                              ),
+                              GaugeRange(
+                                startValue: 500000,
+                                endValue: 750000,
+                                color: Colors.yellow,
+                              ),
+                              GaugeRange(
+                                startValue: 750000,
+                                endValue: 1000000,
+                                color: Colors.green,
+                              ),
+                            ],
+                            pointers: <GaugePointer>[
+                              NeedlePointer(
+                                value: differencePrix, // Utilisez la variable balance ici
+                                needleStartWidth: 1,
+                                needleEndWidth: 3,
+                                knobStyle: KnobStyle(
+                                  knobRadius: 0.05,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                            annotations: <GaugeAnnotation>[
+                              GaugeAnnotation(
+                                widget: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      NumberFormat.currency(
+                                        locale: 'fr', // Changez la langue si nécessaire
+                                        symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
+                                        decimalDigits: 0, // Nombre de chiffres après la virgule
+                                      ).format(differencePrix), // Formate le nombre avec séparateurs des milliers
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.grey.shade900,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text("Fcfa",  style: GoogleFonts.poppins(
                                       color: Colors.grey.shade900,
                                       fontSize: 20,
-                                    ),
-                                  ),
-                                  Text("Fcfa",  style: GoogleFonts.poppins(
-                                    color: Colors.grey.shade900,
-                                    fontSize: 20,
-                                  ),)
-                                ],
+                                    ),)
+                                  ],
+                                ),
+                                angle: 90,
+                                positionFactor: 0.5,
                               ),
-                              angle: 90,
-                              positionFactor: 0.5,
+                            ],
+                          ),
+                        ],
+                      )
+                      ,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                _dialogBuilder(context);
+                              },
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.green.shade700,
+                                ),
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 5,),
+                            Text(
+                              NumberFormat.currency(
+                                locale: 'fr', // Changez la langue si nécessaire
+                                symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
+                                decimalDigits: 0, // Nombre de chiffres après la virgule
+                              ).format(totalPrix), // Formate le nombre avec séparateurs des milliers
+                              style: GoogleFonts.poppins(
+                                color: Colors.grey.shade700,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                _retraitBuilder(context);
+                              },
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red.shade500,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "-",
+                                    style: GoogleFonts.poppins(
+                                         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 5,),
+
+
+                            Text(
+                              NumberFormat.currency(
+                                locale: 'fr', // Changez la langue si nécessaire
+                                symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
+                                decimalDigits: 0, // Nombre de chiffres après la virgule
+                              ).format(totalPrixSortie), // Formate le nombre avec séparateurs des milliers
+                              style: GoogleFonts.poppins(
+                                color: Colors.red.shade400,
+                                fontSize: 20,
+                              ),
                             ),
                           ],
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BookingPage()));
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 350,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue.shade500,
+                        ),
+                        child: Center(
+                          child: Text("Mes rendez-vous",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white, fontSize: 20)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GestionPage()));
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 350,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.blue.shade500),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Text("Gestion",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.blue.shade500, fontSize: 20)),
+                        ),
+                      ),
                     )
-                    ,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              _dialogBuilder(context);
-                            },
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.green.shade700,
-                              ),
-                              child: const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5,),
-                          Text(
-                            NumberFormat.currency(
-                              locale: 'fr', // Changez la langue si nécessaire
-                              symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
-                              decimalDigits: 0, // Nombre de chiffres après la virgule
-                            ).format(totalPrix), // Formate le nombre avec séparateurs des milliers
-                            style: GoogleFonts.poppins(
-                              color: Colors.grey.shade700,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              _retraitBuilder(context);
-                            },
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.red.shade500,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "-",
-                                  style: GoogleFonts.poppins(
-                                       fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5,),
-
-
-                          Text(
-                            NumberFormat.currency(
-                              locale: 'fr', // Changez la langue si nécessaire
-                              symbol: '',   // Supprime le symbole monétaire (par exemple, € ou $)
-                              decimalDigits: 0, // Nombre de chiffres après la virgule
-                            ).format(totalPrixSortie), // Formate le nombre avec séparateurs des milliers
-                            style: GoogleFonts.poppins(
-                              color: Colors.red.shade400,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const BookingPage()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 350,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue.shade500,
-                      ),
-                      child: Center(
-                        child: Text("Mes rendez-vous",
-                            style: GoogleFonts.poppins(
-                                color: Colors.white, fontSize: 20)),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20,),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const GestionPage()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 350,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.blue.shade500),
-                        color: Colors.white,
-                      ),
-                      child: Center(
-                        child: Text("Gestion",
-                            style: GoogleFonts.poppins(
-                                color: Colors.blue.shade500, fontSize: 20)),
-                      ),
-                    ),
-                  )
-                ],
-              );
-            }
+                  ],
+                );
+              }
+            ),
           ),
         ),
       ),
@@ -630,36 +639,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             height: 170,
             child: Column(
               children: [
-                // TextFormField(
-                //   controller: libelleRetraitController,
-                //   keyboardType: TextInputType.visiblePassword,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Svp entrez le libelle';
-                //     }
-                //     return null;
-                //   },
-                //   decoration: InputDecoration(
-                //     hintText: "Ex: paiement fournisseur",
-                //     fillColor: Colors.white,
-                //     filled: true,
-                //     hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
-                //     // suffixIcon: Icon(Icons.remove_red_eye_outlined,color: Colors.grey.shade200,),
-                //     // prefixIcon: Icon(Icons.lock,color: Colors.grey.shade200,),
-                //     focusedBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //     enabledBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //     errorBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //   ),
-                // ),
+
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: motifRetraitController,
@@ -840,7 +820,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
   void logout() async {
     try {
-      // Affiche le dialogue de chargement
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -908,6 +887,18 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           backgroundColor: Colors.red,
         ),
+      );
+    }
+  }
+
+  void deconnexionPrestataire() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_userInfoProvider.userInfoModel?.data?.isActive == 0) {
+      await prefs.remove("tokens");
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+            (route) => false,
       );
     }
   }

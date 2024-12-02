@@ -130,7 +130,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               const SizedBox(height: 20,),
               passwordField(),
               const SizedBox(height: 10,),
-              Text(""),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -255,7 +254,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (dataResponse == null) {
         return;
       }
-      if (dataResponse.success == true) {
+      if (dataResponse.success == true && dataResponse.data?.user!.isActive == 1) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString("tokens", dataResponse.data?.token ?? "");
         //SharedPreferencesServices.saveToken(dataResponse.token ?? "");
@@ -265,7 +264,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage(isActive: dataResponse.data?.user!.isActive,)),
               (route) => false,
         );
       } else {
