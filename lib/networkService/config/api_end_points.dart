@@ -22,7 +22,7 @@ class ApiEndPoints {
   static const listCatalogue = "/api/user/catalogues/";
   static const notification = "/api/user/notifications";
   static const notificationId = "/api/user/notification/show";
-  static const deleteCatalogue = "/api/user/catalogue";
+  static const deleteCatalogue = "/api/user/catalogue/";
   static const workingDay ="/api/user/working-days/store";
   static const updateWorkingDay = "/api/user/working-days/update/";
 
