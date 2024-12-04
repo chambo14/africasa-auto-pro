@@ -37,7 +37,7 @@ class _PasswordForgotPageState extends ConsumerState<PasswordForgotPage> {
           padding: const EdgeInsets.only(left: 15,right: 15, top: 30),
           child: Column(
             children: [
-              Image.asset("assets/logo.png"),
+              Image.asset("assets/africasaPro.png"),
               Text("J'ai oublié mon mot de passe", style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),),
               const SizedBox(height: 70,),
               contactField(),
