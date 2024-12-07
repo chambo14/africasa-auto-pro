@@ -5,6 +5,7 @@ import 'package:africasa_mecano/provider/list_appoint_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
 
 class BookingPage extends ConsumerStatefulWidget {
@@ -50,6 +51,19 @@ class _BookingPageState extends ConsumerState<BookingPage> {
   Widget ListAppoint(){
    return Consumer(builder: (context, ref, child){
      _listAppointProvider = ref.watch(appointsProvider);
+     String _formatName(String fullname) {
+       List<String> names = fullname.split(" ");
+       if (names.length == 1) return names.first;
+       String formattedName = names.first;
+       for (int i = 1; i < names.length; i++) {
+         if (names[i].isNotEmpty) {
+           formattedName += " ${names[i][0].toUpperCase()}."; // Ajoute l'initiale suivie d'un point
+         }
+       }
+
+       return formattedName;
+     }
+
 
      if (_listAppointProvider.appointMOdel == null) {
        // Retourne un loader pendant le chargement
@@ -107,7 +121,7 @@ class _BookingPageState extends ConsumerState<BookingPage> {
            return Column(
              children: [
                Container(
-                 height: 170,
+                 height: 180,
                  width: 350,
                  padding: const EdgeInsets.all(10),
                  decoration: BoxDecoration(
@@ -152,12 +166,23 @@ class _BookingPageState extends ConsumerState<BookingPage> {
                      Row(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         const SizedBox(width: 20,),
                          Text("Rendez-vous avec: ", style: GoogleFonts.poppins(fontSize: 13, ),),
                          const SizedBox(width: 2,),
                          Text("${item.client?.name ?? "N/"}", style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w800),),
                          const SizedBox(width: 2,),
-                         Text("${item.client?.lastname ?? "D"}", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w800),),
+                         Text(
+                           _formatName(item.client?.lastname ?? "D"),
+                           style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w800),
+                         ),
+                         // Text("${item.client?.lastname ?? "D"}", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w800),),
+
+                       ],
+                     ),
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.start,
+                       children: [
+                         Text("Date de RDV :  ", style: GoogleFonts.poppins(fontSize: 13, ),),
+                         Text(DateFormat('dd-MM-yyyy').format(item.dateRdv), style: GoogleFonts.poppins(fontSize: 13,),),
 
                        ],
                      ),
@@ -166,16 +191,16 @@ class _BookingPageState extends ConsumerState<BookingPage> {
                        children: [
                          Text("Heure de RDV :  ", style: GoogleFonts.poppins(fontSize: 13, ),),
                          Text(item.hourStartRdv.toString(), style: GoogleFonts.poppins(fontSize: 13,fontWeight: FontWeight.w700),),
-                         Text("-", style: GoogleFonts.poppins(fontSize: 15,fontWeight: FontWeight.w500)),
-                         const SizedBox(width: 2,),
-                         Text(item.hourEndRdv.toString(), style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700),),
+                         // Text("-", style: GoogleFonts.poppins(fontSize: 15,fontWeight: FontWeight.w500)),
+                         // const SizedBox(width: 2,),
+                         // Text(item.hourEndRdv.toString(), style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700),),
                        ],
                      ),
                      Row(
                        mainAxisAlignment: MainAxisAlignment.end,
                        children: [
                          TextButton(onPressed: (){
-                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ClientPage(data: item)));
+                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ClientPage(id: item.id)));
                          }, child: Text("Voir plus", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400))),
                        ],
                      )

@@ -1,3 +1,4 @@
+import 'package:africasa_mecano/booking_page.dart';
 import 'package:africasa_mecano/notification/liste_notification_page.dart';
 import 'package:africasa_mecano/provider/detail_notification_provider.dart';
 import 'package:flutter/material.dart';
@@ -54,29 +55,38 @@ late DetailNotificationProvider _notificationProvider = DetailNotificationProvid
                   );
                 }
 
-                return Container(
-                  height: 100,
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.info_rounded, color: Colors.grey.shade500,),
-                          const SizedBox(width: 5,),
-                          Text(data.title.toString(), style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade500, fontWeight: FontWeight.w500)),
-                        ],
-                      ),
-                      const SizedBox(height: 10,),
-                      Text(data.message.toString(), style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey.shade700, fontWeight: FontWeight.w500)),
-                      const SizedBox(height: 10,),
+                return InkWell(
+                  onTap: (){
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const BookingPage()),
+                          (route) => false,
+                    );
+                  },
+                  child: Container(
+                    height: 100,
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.info_rounded, color: Colors.grey.shade500,),
+                            const SizedBox(width: 5,),
+                            Text(data.title.toString(), style: GoogleFonts.poppins(fontSize: 15, color: Colors.blue.shade500, fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                        const SizedBox(height: 10,),
+                        Text(data.message.toString(), style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey.shade700, fontWeight: FontWeight.w500)),
+                        const SizedBox(height: 10,),
 
-                    ],
+                      ],
+                    ),
                   ),
                 );
               }

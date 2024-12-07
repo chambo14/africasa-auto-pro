@@ -17,8 +17,9 @@ import 'core/utils/strings.dart';
 import 'domain/models/appoint_model.dart';
 
 class ClientPage extends ConsumerStatefulWidget {
-  const ClientPage({super.key, required this.data});
- final Datum data;
+  const ClientPage({super.key,  this.id});
+ // final Datum data;
+ final int? id;
 
   @override
   ConsumerState<ClientPage> createState() => _ClientPageState();
@@ -37,7 +38,7 @@ class _ClientPageState extends ConsumerState<ClientPage> {
       _approveModel = ref.read(approveProvider);
       _refusedProvider = ref.read(refusedProvider);
       _detailAppointmentProvider.infoAppointment(
-          id: widget.data.client!.id.toInt());
+          id: widget.id!.toInt());
     });
     super.initState();
   }
@@ -118,7 +119,7 @@ class _ClientPageState extends ConsumerState<ClientPage> {
                       Text("Date de rendez-vous :",  style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey.shade600)),
                       const SizedBox(width: 10,),
                       Text(
-                        DateFormat('yyyy-MM-dd').format(info.data!.appointment.dateRdv),
+                        DateFormat('dd-MM-yyyy').format(info.data!.appointment.dateRdv),
                         style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey.shade900),
                       ),
 
@@ -131,9 +132,9 @@ class _ClientPageState extends ConsumerState<ClientPage> {
                       const SizedBox(width: 10,),
                       Text(info.data!.appointment.hourStartRdv.toString(),  style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey.shade900)),
                       const SizedBox(width: 5,),
-                      Text("-", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.grey.shade900)),
-                      const SizedBox(width: 5,),
-                      Text(info.data!.appointment.hourEndRdv.toString(),  style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey.shade900)),
+                      // Text("-", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.grey.shade900)),
+                      // const SizedBox(width: 5,),
+                      // Text(info.data!.appointment.hourEndRdv.toString(),  style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey.shade900)),
                     ],
                   ),
                   const SizedBox(height: 30,),

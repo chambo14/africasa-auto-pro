@@ -48,53 +48,69 @@ class _ProfilPageState extends ConsumerState<ProfilPage> {
               return Column(
                 children: [
                   CircleAvatar(
-                    radius: 80, // Rayon pour obtenir un diamètre de 150
-                    backgroundColor: Colors.grey.shade300, // Couleur de bordure ou de fond par défaut
-                    child: ClipOval( // Utilisation de ClipOval pour garantir que l'image reste circulaire
+                    radius: 80,
+                    backgroundColor: Colors.grey.shade300,
+                    child: ClipOval(
                       child: FadeInImage(
-                        placeholder: AssetImage('assets/images/loader.gif'), // Vous pouvez remplacer cela par un asset image de votre choix
-                        image: NetworkImage(infoClient.profilPic),
-                        width: 160, // Diamètre du CircleAvatar
+                        placeholder: const AssetImage('assets/icon/logoF.png'),
+                        image: infoClient.profilPic != null && infoClient.profilPic.isNotEmpty
+                            ? NetworkImage(infoClient.profilPic)
+                            : const NetworkImage('https://via.placeholder.com/150'),
+                        imageErrorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.person,
+                            size: 80,
+                            color: Colors.grey,
+                          );
+                        },
+                        width: 160,
                         height: 160,
-                        fit: BoxFit.cover, // Remplir l'espace sans déformer l'image
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 30,),
                   Row(
                     children: [
-                      Text("Nom:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal),),
+                      Text("Nom:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal),),
                       const SizedBox(width: 10,),
-                      Text(infoClient.name.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
+                      Text(infoClient.name.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
                     ],
                   ),
                   Row(
                     children: [
-                      Text("Prenoms:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal)),
+                      Text("Prenoms:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal)),
                       const SizedBox(width: 10,),
-                      Text(infoClient.lastname.toString(),  style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
+                      Flexible(child: Text(infoClient.lastname.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal, color: Colors.blue.shade500)))
                     ],
                   ),
                   Row(
                     children: [
-                      Text("Email:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal)),
+                      Text("Email:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal)),
                       const SizedBox(width: 10,),
-                      Text(infoClient.email.toString(),  style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
+                      Flexible(child: Text(infoClient.email.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal, color: Colors.blue.shade500)))
                     ],
                   ),
                   Row(
                     children: [
-                      Text("Contact:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal)),
+                      Text("Contact:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal)),
                       const SizedBox(width: 10,),
-                      Text(infoClient.contact.toString(),  style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
+                      Text(infoClient.contact.toString(),  style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
                     ],
                   ),
 
                   Row(
                     children: [
-                      Text("Professionnel:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal)),
+                      Text("Professionnel:", style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal)),
                       const SizedBox(width: 10,),
-                      Text(infoClient.mecanicien!.speciality.toString(),  style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
+                      Text(infoClient.mecanicien!.speciality.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 15, fontStyle: FontStyle.normal, color: Colors.blue.shade500))
                     ],
                   ),
                   const SizedBox(height: 20,),

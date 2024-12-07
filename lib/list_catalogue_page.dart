@@ -127,67 +127,77 @@ class _ListCataloguePageState extends ConsumerState<ListCataloguePage> {
 
       return SizedBox(
         height: 600,
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // number of items in each row
-            mainAxisSpacing: 8.0, // spacing between rows
-            crossAxisSpacing: 8.0, // spacing between columns
-          ),
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) {
-            var item = data[index];
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () async {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title:  Text('Suppression', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.blue.shade500),),
-                        content:  SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              Text('Voulez-vous supprimer cette image de votre catalogue?', style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.grey.shade800)),
+        child: RefreshIndicator(
+          color: Colors.white,
+          backgroundColor: Colors.blue,
+          strokeWidth: 2.0,
+          onRefresh: () async {
+            // Replace this delay with the code to be executed during refresh
+            // and return a Future when code finishes execution.
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // number of items in each row
+              mainAxisSpacing: 8.0, // spacing between rows
+              crossAxisSpacing: 8.0, // spacing between columns
+            ),
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index) {
+              var item = data[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: false, // user must tap button!
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title:  Text('Suppression', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.blue.shade500),),
+                          content:  SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                Text('Voulez-vous supprimer cette image de votre catalogue?', style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.grey.shade800)),
 
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('Non'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: const Text('Supprimer'),
-                            onPressed: () {
-                              deleteCatalogue(item.id);
-                              Navigator.of(context).pop();
-                            },
-                          )
-                        ],
-                      );
-                    },
-                  );
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Non'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Supprimer'),
+                              onPressed: () {
+                                deleteCatalogue(item.id);
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
 
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5), // Coins arrondis
-                  child: Image.network(
-                    item.photo != null && item.photo.isNotEmpty
-                        ? item.photo.toString()
-                        : 'https://via.placeholder.com/150/66b7d2',
-                    fit: BoxFit.cover, // Remplit l'espace
-                    width: double.infinity,
-                    // Largeur de chaque élément
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5), // Coins arrondis
+                    child: Image.network(
+                      item.photo != null && item.photo.isNotEmpty
+                          ? item.photo.toString()
+                          : 'https://via.placeholder.com/150/66b7d2',
+                      fit: BoxFit.cover, // Remplit l'espace
+                      width: double.infinity,
+                      // Largeur de chaque élément
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       );
     });
