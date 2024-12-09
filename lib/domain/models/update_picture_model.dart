@@ -41,21 +41,21 @@ class UpdatePictureModel {
 }
 
 class Datum {
-  final int id;
-  final String reference;
-  final String typeUser;
-  final String name;
-  final String lastname;
-  final String email;
-  final String contact;
+  final int? id;
+  final String? reference;
+  final String? typeUser;
+  final String? name;
+  final String? lastname;
+  final String? email;
+  final String? contact;
   final dynamic emailVerifiedAt;
-  final int isActive;
-  final int isBanned;
-  final int isValidated;
+  final int? isActive;
+  final int? isBanned;
+  final int? isValidated;
   final DateTime createdAt;
   final DateTime updatedAt;
   final dynamic deletedAt;
-  final int connections;
+  final int? connections;
   final dynamic profilPic;
   final dynamic deviceToken;
 

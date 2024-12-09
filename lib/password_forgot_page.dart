@@ -119,7 +119,7 @@ class _PasswordForgotPageState extends ConsumerState<PasswordForgotPage> {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) =>  ResetPage(token: dataResponse.data!.token,)),
+          MaterialPageRoute(builder: (context) =>  ResetPage(token: dataResponse.data!.token.toString(),)),
               (route) => false,
         );
       } else {

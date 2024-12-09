@@ -240,7 +240,7 @@ class ApiRepository {
       return UpdateProfilModel(message: ErrorResponse.checkMessage(e));
     }
   }
-  Future<PasswordModel?> passwordForgot(String contact,) async {
+  Future<PasswordModel?> passwordForgot(String contact) async {
     String url = Api.baseUrl + ApiEndPoints.modifiedPassword;
     if (kDebugMode) {
       print(url);
@@ -279,6 +279,7 @@ class ApiRepository {
         return PasswordModel();
       }
     } catch (e) {
+      print("l'erreur est de $e");
       return PasswordModel(message: ErrorResponse.checkMessage(e));
     }
   }

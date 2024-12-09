@@ -548,7 +548,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     return null;
                   },
                   decoration: InputDecoration(
-                    hintText: "Ex: achat materiel",
+                    hintText: "Ex: chiffre d'affaire",
                     fillColor: Colors.white,
                     filled: true,
                     hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
@@ -651,7 +651,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     return null;
                   },
                   decoration: InputDecoration(
-                    hintText: "Ex: achat materiel",
+                    hintText: "Ex: motif de sortie",
                     fillColor: Colors.white,
                     filled: true,
                     hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),

@@ -73,19 +73,19 @@ class Data {
 }
 
 class User {
-  final int id;
-  final String reference;
-  final String typeUser;
-  final String name;
-  final String lastname;
-  final String email;
-  final String contact;
+  final int? id;
+  final String? reference;
+  final String? typeUser;
+  final String? name;
+  final String? lastname;
+  final String? email;
+  final String? contact;
   final dynamic emailVerifiedAt;
-  final int isActive;
-  final int isBanned;
-  final int isValidated;
-  final String createdAt;
-  final String updatedAt;
+  final int? isActive;
+  final int? isBanned;
+  final int? isValidated;
+  final String? createdAt;
+  final String? updatedAt;
   final dynamic deletedAt;
   final Mecanicien mecanicien;
 
@@ -184,20 +184,20 @@ class User {
 }
 
 class Mecanicien {
-  final int id;
-  final int userId;
-  final String name;
-  final String lastname;
-  final String email;
-  final String contact;
+  final int? id;
+  final int? userId;
+  final String? name;
+  final String? lastname;
+  final String? email;
+  final String? contact;
   final dynamic contact2;
   final dynamic adresse;
   final dynamic ville;
   final dynamic numCni;
   final dynamic photo;
   final dynamic societeId;
-  final String createdAt;
-  final String updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
   final dynamic deletedAt;
   final dynamic speciality;
   final dynamic experience;

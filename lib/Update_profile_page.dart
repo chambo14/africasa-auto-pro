@@ -443,27 +443,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
           context: context, builder: (context) => const NetworkErrorDialog());
     }
   }
-  // void changeProfile() {
-  //   if (name.text.isNotEmpty || lastname.text.isNotEmpty || ville.text.isNotEmpty || adresse.text.isNotEmpty || cni.text.isNotEmpty || _imageFile != null) {
-  //     // Proceed with profile update submission
-  //     updateProfileSubmit(name.text, lastname.text, ville.text, adresse.text, cni.text);
-  //
-  //     // If an image is selected, upload it as well
-  //     if (_imageFile != null) {
-  //       uploadSubmit(_imageFile!); // Call image upload function if an image is selected
-  //     }
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         duration: const Duration(seconds: 3),
-  //         content: Text(
-  //           'Veuillez remplir les champs obligatoires et sélectionner une image.',
-  //           style: GoogleFonts.poppins(
-  //               fontSize: 16,
-  //               fontWeight: FontWeight.w400,
-  //               color: Colors.white),
-  //         )));
-  //   }
-  // }
+
   void uploadSubmit( File picture) async {
     var checkInternet = checkNetwork();
 
@@ -481,13 +461,27 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
         return;
       }
       if (dataResponse.success == true) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //     duration: const Duration(seconds: 5),
+        //     content: Text(dataResponse.message.toString(),
+        //         style: GoogleFonts.poppins(
+        //             fontSize: 16,
+        //             fontWeight: FontWeight.w400,
+        //             color: Colors.white))));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             duration: const Duration(seconds: 5),
-            content: Text(dataResponse.message.toString(),
-                style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white))));
+            content: Text(
+              dataResponse.message.toString(),
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+            ),
+          ));
+        }
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             duration: const Duration(seconds: 5),

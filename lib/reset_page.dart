@@ -40,9 +40,9 @@ class _ResetPageState extends ConsumerState<ResetPage> {
           padding: const EdgeInsets.only(left: 15,right: 15, top: 20),
           child: Column(
             children: [
-              Image.asset("assets/africasaPro.png"),
+              Image.asset("assets/africasaPro.png", height: 200,),
               Text("J'ai oublié mon mot de passe", style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),),
-              const SizedBox(height: 45,),
+              const SizedBox(height: 20,),
               contactField(),
               const SizedBox(height: 15,),
               passwordField(),
