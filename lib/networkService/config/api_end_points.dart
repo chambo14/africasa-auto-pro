@@ -25,6 +25,7 @@ class ApiEndPoints {
   static const deleteCatalogue = "/api/user/catalogue/";
   static const workingDay ="/api/user/working-days/store";
   static const updateWorkingDay = "/api/user/working-days/update/";
+  static const deleteAccount = "/api/account/delete";
 
 
 

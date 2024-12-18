@@ -6,6 +6,7 @@ import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/catalogue_modele.dart';
 import 'package:africasa_mecano/domain/models/day_model.dart';
 import 'package:africasa_mecano/domain/models/delete_catalogue_model.dart';
+import 'package:africasa_mecano/domain/models/delete_compt_model.dart';
 import 'package:africasa_mecano/domain/models/detail_appointment_model.dart';
 import 'package:africasa_mecano/domain/models/detail_notification_model.dart';
 import 'package:africasa_mecano/domain/models/list_operation_model.dart';
@@ -135,7 +136,7 @@ class ApiRepository {
     }
   }
   Future<ResponseModel?> loginCustomer(
-      String login, String password, String device_token) async {
+      String login, String password, String device_token, String type_user) async {
     String url = Api.baseUrl + ApiEndPoints.login;
     if (kDebugMode) {
       print(url);
@@ -146,7 +147,8 @@ class ApiRepository {
         data: {
           "login": login,
           "password": password,
-          "device_token": device_token
+          "device_token": device_token,
+          "type_user": type_user
         },
         options: Options(
           headers: {
@@ -168,15 +170,6 @@ class ApiRepository {
       } else if (response.statusCode == 400 || response.statusCode == 404) {
         Map<String, dynamic> errorData = response.data;
         String errorMessage = errorData["message"] ?? "Une erreur inconnue est survenue.";
-        if (errorData["data"] != null && errorData["data"] is Map<String, dynamic>) {
-          final detailedErrors = errorData["data"];
-          if (detailedErrors["password"] != null) {
-            errorMessage += "\n" + (detailedErrors["password"] as List).join(", ");
-          }
-          if (detailedErrors["error"] != null) {
-            errorMessage += "\n" + detailedErrors["error"];
-          }
-        }
 
         if (kDebugMode) {
           print("Erreur (status: ${response.statusCode}): $errorMessage");
@@ -190,9 +183,10 @@ class ApiRepository {
       if (kDebugMode) {
         print("Exception: $e");
       }
-      return ResponseModel(message: ErrorResponse.checkMessage(e));
+      return ResponseModel();
     }
   }
+
 
   Future<UpdateProfilModel?> UpdateProfil(String name, String lastname, String adresse, String speciality) async {
     String url = Api.baseUrl + ApiEndPoints.updateProfil;
@@ -1166,6 +1160,34 @@ class ApiRepository {
     } catch (e) {
       print("capture $e");
       return UpdateDayModel(message: ErrorResponse.checkMessage(e));
+    }
+  }
+
+  Future<DeleteComptModel?> deleteAccount() async {
+    String url = Api.baseUrl + ApiEndPoints.deleteAccount;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+    if (kDebugMode) {
+      print(url);
+    }
+    try {
+      final response = await apiUtils.get(
+          url: url,
+          options: Options(headers: {"Authorization": "Bearer $tokens"}));
+      if (response.statusCode == 200) {
+        DeleteComptModel delete = DeleteComptModel.fromJson(response.data);
+        print('commpte supprime a pour valeur $delete');
+        return delete;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return DeleteComptModel();
+      }
+    } catch (e) {
+      print("la valeur deX $e");
+      return DeleteComptModel();
     }
   }
 }

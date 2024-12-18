@@ -4,12 +4,14 @@ import 'package:africasa_mecano/gestion_page.dart';
 import 'package:africasa_mecano/notification/liste_notification_page.dart';
 import 'package:africasa_mecano/password_page.dart';
 import 'package:africasa_mecano/profil_page.dart';
+import 'package:africasa_mecano/provider/delete_provider.dart';
 import 'package:africasa_mecano/provider/info_user_provider.dart';
 import 'package:africasa_mecano/provider/list_operation_provider.dart';
 import 'package:africasa_mecano/provider/logout_provider.dart';
 import 'package:africasa_mecano/provider/notification_provider.dart';
 import 'package:africasa_mecano/provider/operation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -53,6 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   late UserInfoProvider _userInfoProvider = UserInfoProvider();
   late ListOperationProvider _listOperationProvider = ListOperationProvider();
   late NotificationProvider _notificationProvider = NotificationProvider();
+  late DeleteProvider _deleteProvider = DeleteProvider();
   Future<void> loadSavedValues() async {
     final prefs = await SharedPreferences.getInstance();
     somGin = prefs.getDouble('somGin') ?? 0.0;
@@ -115,6 +118,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       _listOperationProvider.getListOperation();
       _notificationProvider = ref.read(notificationProvider);
       _notificationProvider.getListNotification();
+      _deleteProvider = ref.read(deleteCompteProvider);
+
       loadSavedValues();
 
       deconnexionPrestataire();
@@ -143,19 +148,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Container(
-                    //   height: 65,
-                    //   width: 65,
-                    //   decoration: BoxDecoration(
-                    //     image:  DecorationImage(
-                    //       image: NetworkImage(infoClient.profilPic!= null && infoClient.profilPic.isNotEmpty?infoClient.profilPic.toString(): 'https://via.placeholder.com/150'),
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //     border: Border.all(color: Colors.grey.shade300),
-                    //     borderRadius: BorderRadius.circular(30),
-                    //   ),
-                    //
-                    // ),
+
                     CircleAvatar(
                       radius: 32.5, // Rayon pour correspondre à 65x65
                       backgroundColor: Colors.grey.shade300, // Couleur de bordure
@@ -218,6 +211,33 @@ class _HomePageState extends ConsumerState<HomePage> {
               title:  Text('Se déconnecter', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.blue.shade500)),
               onTap: () {
                 logout();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete, color: Colors.red.shade800),
+              title:  Text('Supprimer le compte', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.red.shade500)),
+              onTap: () {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: Text('Suppression de compte', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.red.shade500)),
+                    content: Text('Voulez-vous supprimer votre compte?',style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.grey.shade700)),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Annuler'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+
+                              suppression();
+
+                        },
+                        child: const Text('Confirmer'),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ],
@@ -507,36 +527,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             height: 170,
             child: Column(
               children: [
-                // TextFormField(
-                //   controller: libelleController,
-                //   keyboardType: TextInputType.visiblePassword,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Svp entrez le libelle';
-                //     }
-                //     return null;
-                //   },
-                //   decoration: InputDecoration(
-                //     hintText: "Ex: paiement fournisseur",
-                //     fillColor: Colors.white,
-                //     filled: true,
-                //     hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
-                //     // suffixIcon: Icon(Icons.remove_red_eye_outlined,color: Colors.grey.shade200,),
-                //     // prefixIcon: Icon(Icons.lock,color: Colors.grey.shade200,),
-                //     focusedBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //     enabledBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //     errorBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(color: Colors.grey.shade700, width: 0.5),
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //   ),
-                // ),
+
                 const SizedBox(height: 10,),
                 TextFormField(
                   controller: motifController,
@@ -860,7 +851,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return;
       }
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      ;
+
       // Vérifie le succès de la réponse
       if (response.success == true) {
         Navigator.of(context).pop(); // Ferme le dialogue
@@ -890,6 +881,68 @@ class _HomePageState extends ConsumerState<HomePage> {
       );
     }
   }
+
+  void suppression() async {
+    try {
+      // Affiche une boîte de dialogue pendant la suppression
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.all(10),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Suppression en cours...",
+                  style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      color: ColorsUtil.black,
+                      fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 12),
+                CircularProgressIndicator(),
+              ],
+            ),
+          );
+        },
+      );
+
+      // Appeler la méthode de suppression du compte
+      var response = await _deleteProvider.supprimerCompte();
+
+      if (response != null && response.success == true) {
+        // Supprimez les préférences stockées
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+
+        // Vide les fichiers temporaires ou les caches
+        await DefaultCacheManager().emptyCache();
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+              (route) => false,
+        );
+      } else {
+        throw Exception(response?.message ?? "Échec de la suppression");
+      }
+    } catch (e) {
+
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Erreur : ${e.toString()}",
+            style: GoogleFonts.poppins(color: Colors.white, fontSize: 16),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
 
   void deconnexionPrestataire() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

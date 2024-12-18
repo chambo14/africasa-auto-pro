@@ -37,7 +37,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   FocusNode focusNode = FocusNode();
   bool _isObscured = true;
   String _deviceToken = '';
-  String _instruction = '(please wait)';
+  String typeUser = 'MECANICIEN';
 
   @override
   void initState() {
@@ -238,7 +238,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return await rootBundle.loadString('assets/countries/country_list_en.json');
   }
 
-  void loginSubmit( String login, String password, device) async {
+  void loginSubmit( String login, String password, device,typeU) async {
     var checkInternet = checkNetwork();
 
     if (await checkInternet) {
@@ -249,7 +249,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             return const DialogAlert();
           });
       var dataResponse =
-      await _loginPhoneController.login(login: login, password: password, device_token: device);
+      await _loginPhoneController.login(login: login, password: password, device_token: device, type_user: typeU);
 
       if (dataResponse == null) {
         return;
@@ -291,7 +291,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (contactController.text.isNotEmpty || passwordController.text.isNotEmpty ) {
 
 
-      loginSubmit(contactController.text, passwordController.text, _deviceToken);
+      loginSubmit(contactController.text, passwordController.text, _deviceToken, typeUser);
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -47,14 +47,20 @@ class _SplashPageState extends State<SplashPage> {
     var token = prefs.getString("tokens");
     data = await SharedPreferencesServices.getUser();
 
-    if(token != null && token.isNotEmpty && data != null){
+    if (token != null && token.isNotEmpty && data != null) {
+      print("Token: ${prefs.getString("tokens")}");
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
-    }else {
-      await prefs.remove("tokens");
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      await prefs.remove("tokens"); // Nettoie les préférences
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginPage()));
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
     }
+
 
   }
 }

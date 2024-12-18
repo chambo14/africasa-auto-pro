@@ -51,6 +51,7 @@ dependencies:
   badges: ^3.1.2
   pushy_flutter: ^2.0.18
   change_app_package_name: ^1.4.0
+  flutter_cache_manager: ^3.4.1
   #pushy_flutter: ^2.0.18
 
 dev_dependencies:
