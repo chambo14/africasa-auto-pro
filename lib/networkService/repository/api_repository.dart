@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:africasa_mecano/domain/models/approve_model.dart';
 import 'package:africasa_mecano/domain/models/catalogue_modele.dart';
+import 'package:africasa_mecano/domain/models/day_list_model.dart';
 import 'package:africasa_mecano/domain/models/day_model.dart';
 import 'package:africasa_mecano/domain/models/delete_catalogue_model.dart';
 import 'package:africasa_mecano/domain/models/delete_compt_model.dart';
@@ -1116,7 +1117,7 @@ class ApiRepository {
 
   Future<UpdateDayModel?> updateWorking(int mecanicienId, String libelle, String horaire, int id) async {
     // String url = Api.baseUrl + ApiEndPoints.updateWorkingDay;
-    String url = "${Api.baseUrl + ApiEndPoints.updateWorkingDay}$mecanicienId";
+    String url = "${Api.baseUrl + ApiEndPoints.updateWorkingDay}$id";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var tokens = prefs.getString("tokens");
     if (kDebugMode) {
@@ -1163,8 +1164,62 @@ class ApiRepository {
     }
   }
 
+  // Future<DeleteComptModel?> deleteAccount() async {
+  //   String url = Api.baseUrl + ApiEndPoints.deleteAccount;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var tokens = prefs.getString("tokens");
+  //   if (kDebugMode) {
+  //     print(url);
+  //   }
+  //   try {
+  //     final response = await apiUtils.get(
+  //         url: url,
+  //         options: Options(headers: {"Authorization": "Bearer $tokens"}));
+  //     if (response.statusCode == 200) {
+  //       DeleteComptModel delete = DeleteComptModel.fromJson(response.data);
+  //       print('commpte supprime a pour valeur $delete');
+  //       return delete;
+  //     } else {
+  //       Map<String, dynamic> map = json.decode(response.data);
+  //       if (kDebugMode) {
+  //         print(map["message"]);
+  //       }
+  //       return DeleteComptModel();
+  //     }
+  //   } catch (e) {
+  //     print("la valeur deX $e");
+  //     return DeleteComptModel();
+  //   }
+  // }
+
   Future<DeleteComptModel?> deleteAccount() async {
     String url = Api.baseUrl + ApiEndPoints.deleteAccount;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokens = prefs.getString("tokens");
+
+    try {
+      final response = await apiUtils.get(
+          url: url,
+          options: Options(headers: {"Authorization": "Bearer $tokens"}));
+
+      if (response.statusCode == 200) {
+        DeleteComptModel _responseData = DeleteComptModel.fromJson(response.data);
+        return _responseData;
+      } else {
+        Map<String, dynamic> map = json.decode(response.data);
+        if (kDebugMode) {
+          print(map["message"]);
+        }
+        return DeleteComptModel();
+      }
+    } catch (e) {
+      return DeleteComptModel(message: ErrorResponse.checkMessage(e));
+    }
+  }
+
+  Future<DayListModel?> getListDay() async {
+
+    String url = Api.baseUrl + ApiEndPoints.listDay;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var tokens = prefs.getString("tokens");
     if (kDebugMode) {
@@ -1175,19 +1230,19 @@ class ApiRepository {
           url: url,
           options: Options(headers: {"Authorization": "Bearer $tokens"}));
       if (response.statusCode == 200) {
-        DeleteComptModel delete = DeleteComptModel.fromJson(response.data);
-        print('commpte supprime a pour valeur $delete');
-        return delete;
+        DayListModel _mecanoModel = DayListModel.fromJson(response.data);
+        print('mecano a pour valeur $_mecanoModel');
+        return _mecanoModel;
       } else {
         Map<String, dynamic> map = json.decode(response.data);
         if (kDebugMode) {
           print(map["message"]);
         }
-        return DeleteComptModel();
+        return DayListModel(message: response.data["message"]);
       }
     } catch (e) {
-      print("la valeur deX $e");
-      return DeleteComptModel();
+      print("la valeur de $e");
+      return DayListModel();
     }
   }
 }

@@ -26,6 +26,7 @@ class ApiEndPoints {
   static const workingDay ="/api/user/working-days/store";
   static const updateWorkingDay = "/api/user/working-days/update/";
   static const deleteAccount = "/api/account/delete";
+  static const listDay = "/api/user/working-days";
 
 
 

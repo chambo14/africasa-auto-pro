@@ -12,8 +12,8 @@ class UpdateWorkingProvider extends ChangeNotifier {
   final ApiRepository _apiRepository = ApiRepository();
 
   Future<UpdateDayModel?> working(
-      {required int mecanicienId, required String libelle, required String horaire}) async {
-    final response = await _apiRepository.updateWorking(mecanicienId, libelle, horaire, mecanicienId);
+      {required int mecanicienId, required String libelle, required String horaire, required int id}) async {
+    final response = await _apiRepository.updateWorking(mecanicienId, libelle, horaire, id);
     notifyListeners();
     if (response == null) {
       return null;

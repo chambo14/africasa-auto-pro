@@ -213,33 +213,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                 logout();
               },
             ),
-            ListTile(
-              leading: Icon(Icons.delete, color: Colors.red.shade800),
-              title:  Text('Supprimer le compte', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.red.shade500)),
-              onTap: () {
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: Text('Suppression de compte', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.red.shade500)),
-                    content: Text('Voulez-vous supprimer votre compte?',style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.grey.shade700)),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        child: const Text('Annuler'),
-                      ),
-                      TextButton(
-                        onPressed: () {
+            Consumer(builder: (context, ref, child) {
+              _deleteProvider = ref.watch(deleteCompteProvider);
+              return ListTile(
+                leading: Icon(Icons.delete, color: Colors.red.shade800),
+                title:  Text('Supprimer le compte', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.red.shade500)),
+                onTap: () {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: Text('Suppression de compte', style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.red.shade500)),
+                      content: Text('Voulez-vous supprimer votre compte?',style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.grey.shade700)),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Annuler'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            SuppressionUser();
+                          },
+                          child: const Text('Confirmer'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ) ;
+            }),
 
-                              suppression();
-
-                        },
-                        child: const Text('Confirmer'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),  // Drawer ajouté ici
@@ -882,16 +884,109 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
-  void suppression() async {
-    try {
-      // Affiche une boîte de dialogue pendant la suppression
-      showDialog(
+  // void suppression() async {
+  //   try {
+  //     // Affichage d'un dialogue de progression
+  //     showDialog(
+  //       context: context,
+  //       barrierDismissible: false,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           backgroundColor: Colors.white,
+  //           contentPadding: const EdgeInsets.all(10),
+  //           content: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text(
+  //                 "Suppression en cours...",
+  //                 style: GoogleFonts.poppins(
+  //                   fontSize: 18,
+  //                   color: ColorsUtil.black,
+  //                   fontWeight: FontWeight.w400,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 12),
+  //               NutsActivityIndicator(
+  //                 radius: 40,
+  //                 tickCount: 16,
+  //                 activeColor: Colors.blue.shade700,
+  //                 inactiveColor: Colors.grey.shade300,
+  //                 animationDuration: const Duration(milliseconds: 750),
+  //                 relativeWidth: 0.3,
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     );
+  //
+  //     // Appel à la méthode supprimerCompte
+  //     var response = await _deleteProvider.deleteUser();
+  //
+  //     // Fermeture du dialogue après l'appel
+  //     Navigator.of(context).pop();
+  //
+  //     if (response == null) {
+  //       // Si la réponse est nulle, afficher un message d'erreur
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text(
+  //             "Erreur lors de la suppression du compte.",
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w400,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //       return;
+  //     }
+  //
+  //     // Gestion du succès de la suppression
+  //     if (response.success == true) {
+  //       final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       prefs.clear(); // Effacer les données locales
+  //
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const LoginPage()),
+  //             (route) => false,
+  //       );
+  //     } else {
+  //       // Si la suppression échoue, lancer une exception
+  //       throw Exception(response.message.toString());
+  //     }
+  //   } catch (e) {
+  //     // Fermeture du dialogue en cas d'erreur
+  //     Navigator.of(context).pop();
+  //
+  //     // Affichage du message d'erreur
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(
+  //           "Erreur : ${e.toString()}",
+  //           style: GoogleFonts.poppins(
+  //             fontSize: 16,
+  //             fontWeight: FontWeight.w400,
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //   }
+  // }
+
+  void SuppressionUser() async {
+    showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.white,
-            contentPadding: const EdgeInsets.all(10),
+            contentPadding: EdgeInsets.all(10),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -902,46 +997,43 @@ class _HomePageState extends ConsumerState<HomePage> {
                       color: ColorsUtil.black,
                       fontWeight: FontWeight.w400),
                 ),
-                const SizedBox(height: 12),
-                CircularProgressIndicator(),
+                const SizedBox(
+                  height: 12,
+                ),
+                NutsActivityIndicator(
+                  radius: 40,
+                  tickCount: 16,
+                  activeColor: ColorsUtil.KcircleGreen,
+                  inactiveColor: Colors.grey.shade300,
+                  animationDuration: const Duration(milliseconds: 750),
+                  relativeWidth: 0.3,
+                ),
               ],
             ),
           );
-        },
-      );
-
-      // Appeler la méthode de suppression du compte
-      var response = await _deleteProvider.supprimerCompte();
-
-      if (response != null && response.success == true) {
-        // Supprimez les préférences stockées
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.clear();
-
-        // Vide les fichiers temporaires ou les caches
-        await DefaultCacheManager().emptyCache();
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-              (route) => false,
-        );
-      } else {
-        throw Exception(response?.message ?? "Échec de la suppression");
-      }
-    } catch (e) {
-
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Erreur : ${e.toString()}",
-            style: GoogleFonts.poppins(color: Colors.white, fontSize: 16),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+        });
+    var response = await _deleteProvider.deleteUser();
+    if(response == null){
+      return;
     }
+    if(response.success == true){
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+            (route) => false,
+      );
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(response.message.toString(),
+              style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white))));
+      Navigator.of(context).pop();
+    }
+
   }
+
 
 
   void deconnexionPrestataire() async {

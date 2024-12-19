@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:africasa_mecano/profil_page.dart';
+import 'package:africasa_mecano/provider/list_day_provider.dart';
 import 'package:africasa_mecano/provider/update_profil_provider.dart';
 import 'package:africasa_mecano/provider/update_working_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,12 +35,16 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   late UpdateProfilProvider _uploadProfileProvider = UpdateProfilProvider();
   late UpdatePictureProvider _updatePictureProvider = UpdatePictureProvider();
   late UpdateWorkingProvider _updateWorkingProvider = UpdateWorkingProvider();
+  late ListDayProvider _listDayProvider = ListDayProvider();
 
   @override
   void initState() {
+
     _uploadProfileProvider = ref.read(updateProfileProvider);
     _updatePictureProvider = ref.read(pictureProvider);
     _updateWorkingProvider = ref.read(updateWorkingProvider);
+    _listDayProvider = ref.read(listDayProvider);
+    _listDayProvider.getListDay();
     super.initState();
   }
   File? _imageFile; // Pour stocker l'image sélectionnée
@@ -382,7 +387,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     if (name.text.isNotEmpty || lastname.text.isNotEmpty || speciality.text.isNotEmpty|| adresse.text.isNotEmpty || libelle.text.isNotEmpty || horaire.text.isNotEmpty) {
 
       updateProfileSubmit(name.text, lastname.text , speciality.text, adresse.text,);
-      daySubmit(widget.id!.toInt(), libelle.text, horaire.text);
+      daySubmit(widget.id!.toInt(), libelle.text, horaire.text, _listDayProvider.dayListModel!.data!.last.id!.toInt() );
 
       if (_imageFile != null) {
         uploadSubmit(_imageFile!); // Call image upload function if an image is selected
@@ -401,7 +406,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     }
   }
 
-  void daySubmit( int mecanicienId, String libelle, horaire) async {
+  void daySubmit( int mecanicienId, String libelle, horaire, int id) async {
     var checkInternet = checkNetwork();
 
     if (await checkInternet) {
@@ -412,7 +417,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             return const DialogAlert();
           });
       var dataResponse =
-      await _updateWorkingProvider.working(mecanicienId: mecanicienId, libelle: libelle, horaire: horaire);
+      await _updateWorkingProvider.working(mecanicienId: mecanicienId, libelle: libelle, horaire: horaire, id: id);
 
       if (dataResponse == null) {
         return;
@@ -461,13 +466,6 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
         return;
       }
       if (dataResponse.success == true) {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //     duration: const Duration(seconds: 5),
-        //     content: Text(dataResponse.message.toString(),
-        //         style: GoogleFonts.poppins(
-        //             fontSize: 16,
-        //             fontWeight: FontWeight.w400,
-        //             color: Colors.white))));
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             duration: const Duration(seconds: 5),

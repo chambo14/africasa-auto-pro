@@ -3,31 +3,29 @@ import 'package:africasa_mecano/domain/models/delete_compt_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/models/user_info_model.dart';
 import '../networkService/repository/api_repository.dart';
 
 final deleteCompteProvider = ChangeNotifierProvider((ref) => DeleteProvider());
 
 class DeleteProvider extends ChangeNotifier {
   final ApiRepository _apiRepository = ApiRepository();
-  DeleteComptModel? _deleteComptModel;
+  late DeleteComptModel _responseData;
+  bool _isConnected = false;
 
-  bool _isLoading = false;
-
-  Future<DeleteComptModel?> supprimerCompte() async {
-    _isLoading = true;
+  Future<DeleteComptModel?>  deleteUser() async {
+    _isConnected = true;
     notifyListeners();
-    var response = await _apiRepository.deleteAccount();
-    _isLoading = false;
+    final response = await _apiRepository.deleteAccount();
+    _isConnected = false;
     notifyListeners();
     if (response == null) {
       return null;
     }
 
-    _deleteComptModel = response;
+    return response;
   }
 
-  DeleteComptModel? get deleteComptModel => _deleteComptModel;
+  DeleteComptModel get responseData => _responseData;
 
-  bool get isLoading => _isLoading;
+  bool get isConnected => _isConnected;
 }

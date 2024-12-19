@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:nuts_activity_indicator/nuts_activity_indicator.dart';
 
 
 class ListNotificationPage extends ConsumerStatefulWidget {
@@ -18,33 +19,7 @@ class _ListNotificationPageState extends ConsumerState<ListNotificationPage> {
   late NotificationProvider _notificationProvider = NotificationProvider();
 
 
-  List<Map<String, String>> notifications = [
-    {
-      'title': 'New Message',
-      'message': 'You have received a new message.',
-      'timestamp': '2024-11-23 10:00:00',
-    },
-    {
-      'title': 'Info Rendez-vous',
-      'message': 'A new update is available for your app.',
-      'timestamp': '2024-11-23 11:15:45',
-    },
-    {
-      'title': 'System Alert',
-      'message': 'Your password will expire soon. Please update it.',
-      'timestamp': '2024-11-23 12:30:10',
-    },
-  ];
 
-  void addNotification() {
-    setState(() {
-      notifications.add({
-        'title': 'Rappel',
-        'message': 'This is a dynamically added notification.',
-        'timestamp': DateTime.now().toString(),
-      });
-    });
-  }
 
   void showNotification(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -56,8 +31,13 @@ class _ListNotificationPageState extends ConsumerState<ListNotificationPage> {
   }
   @override
   void initState() {
-    _notificationProvider = ref.read(notificationProvider);
-    _notificationProvider.getListNotification();
+
+    Future.delayed(Duration.zero, (){
+      _notificationProvider = ref.read(notificationProvider);
+      _notificationProvider.getListNotification();
+
+    });
+
     super.initState();
   }
   @override
@@ -68,17 +48,41 @@ class _ListNotificationPageState extends ConsumerState<ListNotificationPage> {
         backgroundColor: Colors.blue.shade50,
         leading: IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomePage()));},icon: const Icon(Icons.arrow_back_ios),),
         title: Text("Notifications",  style: GoogleFonts.poppins(fontSize: 18, color: Colors.blue.shade500, fontWeight: FontWeight.w500)),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.add_alert),
-        //     onPressed: addNotification, // Ajouter une notification
-        //   ),
-        // ],
       ),
       body: Consumer(
         builder: (context, ref, child) {
           _notificationProvider = ref.watch(notificationProvider);
           var data = _notificationProvider.notificationModel?.data;
+          if (_notificationProvider.isLoading) {
+            return Padding(
+              padding: const EdgeInsets.all(170.0),
+              child: NutsActivityIndicator(
+                radius: 40,
+                tickCount: 16,
+                activeColor: Colors.blue.shade500,
+                inactiveColor: Colors.grey.shade300,
+                animationDuration: const Duration(milliseconds: 750),
+                relativeWidth: 0.3,
+              ),
+            );
+          }
+
+          if (data == null || data.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.only(top:250.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(Icons.notifications_active_outlined, size: 90,  color: Colors.grey.shade700),
+                    Text("Pas de notifications",
+                        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, color: Colors.blue.shade500)),
+                    Text("pour l'instant!",
+                        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal,  color: Colors.blue.shade500)),
+                  ],
+                ),
+              ),
+            );
+          }
           return SizedBox(
             height: 800,
             child: ListView.builder(
