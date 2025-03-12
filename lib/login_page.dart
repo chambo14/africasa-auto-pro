@@ -21,7 +21,6 @@ import 'domain/shared_preferences.dart';
 import 'main.dart';
 import 'menu_page.dart';
 
-
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
@@ -38,16 +37,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   bool _isObscured = true;
   String _deviceToken = '';
   String typeUser = 'MECANICIEN';
+  String phoneCountryCode = "+225";
+  String phoneNumber = "00000000";
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       _loginPhoneController = ref.read(loginControllerProvider);
       initPlatformState();
     });
 
     super.initState();
   }
+
   Future<void> initPlatformState() async {
     // Start the Pushy service
     Pushy.listen();
@@ -112,34 +114,62 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       Pushy.clearBadge();
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-             Image.asset("assets/africasaPro.png", height: 170,),
-              Text("Connecte-toi avec ton numero de telephone", style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
+              Image.asset(
+                "assets/africasaPro.png",
+                height: 170,
               ),
-              const SizedBox(height: 40,),
+              Text(
+                "Connecte-toi avec ton numero de telephone",
+                style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 40,
+              ),
               contactField(),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               passwordField(),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const PasswordForgotPage()));
-                  }, child: Text("Mot de passe oublié?", style: GoogleFonts.poppins(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),)
-                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PasswordForgotPage()));
+                      },
+                      child: Text(
+                        "Mot de passe oublié?",
+                        style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w500),
+                      )),
                 ],
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               loginButton()
             ],
           ),
@@ -147,9 +177,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
-  Widget loginButton(){
+
+  Widget loginButton() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const PasswordPage()));
         checkInfoLogin();
       },
@@ -158,12 +189,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         width: 320,
         decoration: BoxDecoration(
             color: Colors.blue.shade500,
-            borderRadius: BorderRadius.circular(10)
-        ),
-        child: Center(child: Text("Se connecter", style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color: Colors.white),)),
+            borderRadius: BorderRadius.circular(10)),
+        child: Center(
+            child: Text(
+          "Se connecter",
+          style: GoogleFonts.poppins(
+              fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white),
+        )),
       ),
     );
   }
+
   Widget passwordField() {
     return TextFormField(
       controller: passwordController,
@@ -179,13 +215,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         hintText: "Saisissez votre mot de passe",
         fillColor: Colors.white,
         filled: true,
-        hintStyle: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
-        suffixIcon: IconButton(onPressed: (){
-          setState(() {
-            _isObscured = !_isObscured; // Alterner la visibilité
-          });
-        },icon:Icon( _isObscured ? Icons.visibility_off : Icons.visibility,)),
-        prefixIcon: Icon(Icons.lock,color: Colors.grey.shade200,),
+        hintStyle:
+            GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14),
+        suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                _isObscured = !_isObscured; // Alterner la visibilité
+              });
+            },
+            icon: Icon(
+              _isObscured ? Icons.visibility_off : Icons.visibility,
+            )),
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Colors.grey.shade200,
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade900, width: 0.5),
           borderRadius: BorderRadius.circular(10.0),
@@ -201,6 +245,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
+
   Widget contactField() {
     return IntlPhoneField(
       controller: contactController,
@@ -227,18 +272,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
       languageCode: "en",
       onChanged: (phone) {
-        print(phone.completeNumber);
+        setState(() async {
+          phoneCountryCode = phone.countryCode; // Récupère l'indicatif du pays
+          phoneNumber = phone.number; // Récupère le numéro sans l'indicatif
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString("indicatif", phoneCountryCode);
+          print(
+              "${phone.countryCode}${phone.number}"); // Affiche l'indicatif + numéro
+        });
       },
       onCountryChanged: (country) {
         print('Country changed to: ' + country.name);
       },
     );
   }
+
   Future<String> loadFromJson() async {
     return await rootBundle.loadString('assets/countries/country_list_en.json');
   }
 
-  void loginSubmit( String login, String password, device,typeU) async {
+  void loginSubmit(String login, String password, device, typeU) async {
     var checkInternet = checkNetwork();
 
     if (await checkInternet) {
@@ -248,13 +301,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           builder: (context) {
             return const DialogAlert();
           });
-      var dataResponse =
-      await _loginPhoneController.login(login: login, password: password, device_token: device, type_user: typeU);
+      var dataResponse = await _loginPhoneController.login(
+          login: login,
+          password: password,
+          device_token: device,
+          type_user: typeU);
 
       if (dataResponse == null) {
         return;
       }
-      if (dataResponse.success == true && dataResponse.data?.user!.isActive == 1) {
+      if (dataResponse.success == true &&
+          dataResponse.data?.user!.isActive == 1) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString("tokens", dataResponse.data?.token ?? "");
         //SharedPreferencesServices.saveToken(dataResponse.token ?? "");
@@ -264,8 +321,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage(isActive: dataResponse.data?.user!.isActive,)),
-              (route) => false,
+          MaterialPageRoute(
+              builder: (context) => HomePage(
+                    isActive: dataResponse.data?.user!.isActive,
+                  )),
+          (route) => false,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -278,30 +338,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         //codePin.clear();
         Navigator.of(context).pop();
       }
-    }
-
-
-    else {
+    } else {
       showDialog(
           context: context, builder: (context) => const NetworkErrorDialog());
     }
   }
 
-  checkInfoLogin(){
-    if (contactController.text.isNotEmpty || passwordController.text.isNotEmpty ) {
+  checkInfoLogin() {
+    if (contactController.text.isNotEmpty ||
+        passwordController.text.isNotEmpty) {
+      var phone = phoneCountryCode + contactController.text;
 
-
-      loginSubmit(contactController.text, passwordController.text, _deviceToken, typeUser);
-
+      loginSubmit(phone, passwordController.text, _deviceToken,
+          typeUser);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: const Duration(seconds: 3),
           content: Text(
             strings.codeSecret,
             style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.white),
+                fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white),
           )));
       // Navigator.pop(context);
     }
