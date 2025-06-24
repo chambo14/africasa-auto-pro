@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:africasa_mecano/profil_page.dart';
@@ -59,7 +60,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
         });
       }
     } catch (e) {
-      print('Erreur lors de la sélection de l\'image : $e');
+      log('Erreur lors de la sélection de l\'image : $e');
     }
   }
 
@@ -385,13 +386,19 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   }
   changeProfile(){
     if (name.text.isNotEmpty || lastname.text.isNotEmpty || speciality.text.isNotEmpty|| adresse.text.isNotEmpty || libelle.text.isNotEmpty || horaire.text.isNotEmpty) {
-
-      updateProfileSubmit(name.text, lastname.text , speciality.text, adresse.text,);
-      daySubmit(widget.id!.toInt(), libelle.text, horaire.text, _listDayProvider.dayListModel!.data!.last.id!.toInt() );
-
       if (_imageFile != null) {
-        uploadSubmit(_imageFile!); // Call image upload function if an image is selected
+        uploadSubmit(_imageFile!); 
       }
+      
+      updateProfileSubmit(name.text, lastname.text , speciality.text, adresse.text,);
+      // daySubmit(widget.id!.toInt(), libelle.text, horaire.text, 
+      // (_listDayProvider.dayListModel?.data != null 
+      // && _listDayProvider.dayListModel?.data?.length != 0 ?  
+      // _listDayProvider.dayListModel!.data!.last.id!.toInt()
+      // : 0
+    // ) );
+
+      
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

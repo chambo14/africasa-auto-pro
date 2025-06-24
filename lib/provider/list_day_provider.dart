@@ -15,7 +15,7 @@ class ListDayProvider extends ChangeNotifier {
 
   Future<DayListModel?> getListDay() async {
     _isLoading = true;
-    notifyListeners();
+    // notifyListeners();
     var response = await _apiRepository.getListDay();
     _isLoading = false;
     notifyListeners();
